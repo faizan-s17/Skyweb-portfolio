@@ -13,11 +13,11 @@ export const Skills = () => {
   return (
     <section
       id="skills"
-      className="section-shell flex flex-col items-center justify-center gap-6 h-full relative overflow-hidden"
+      className="flex flex-col items-center justify-center gap-6 h-full relative overflow-hidden py-20"
     >
       <SkillText />
 
-      <div className="flex flex-row justify-around flex-wrap mt-4 gap-5 items-center">
+      <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 items-center max-w-4xl mx-auto">
         {SKILL_DATA.map((skill, i) => (
           <SkillDataProvider
             key={skill.skill_name}
@@ -30,7 +30,7 @@ export const Skills = () => {
         ))}
       </div>
 
-      <div className="flex flex-row justify-around flex-wrap mt-4 gap-5 items-center">
+      <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 items-center max-w-4xl mx-auto">
         {FRONTEND_SKILL.map((skill, i) => (
           <SkillDataProvider
             key={skill.skill_name}
@@ -42,7 +42,7 @@ export const Skills = () => {
           />
         ))}
       </div>
-      <div className="flex flex-row justify-around flex-wrap mt-4 gap-5 items-center">
+      <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 items-center max-w-4xl mx-auto">
         {BACKEND_SKILL.map((skill, i) => (
           <SkillDataProvider
             key={skill.skill_name}
@@ -54,7 +54,7 @@ export const Skills = () => {
           />
         ))}
       </div>
-      <div className="flex flex-row justify-around flex-wrap mt-4 gap-5 items-center">
+      <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 items-center max-w-4xl mx-auto">
         {FULLSTACK_SKILL.map((skill, i) => (
           <SkillDataProvider
             key={skill.skill_name}
@@ -66,7 +66,7 @@ export const Skills = () => {
           />
         ))}
       </div>
-      <div className="flex flex-row justify-around flex-wrap mt-4 gap-5 items-center">
+      <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 items-center max-w-4xl mx-auto">
         {OTHER_SKILL.map((skill, i) => (
           <SkillDataProvider
             key={skill.skill_name}
