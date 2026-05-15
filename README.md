@@ -61,12 +61,23 @@ space-portfolio/
     |-- index.ts
   |- constants/
     |-- index.ts
+  |- data/
+    |-- contact.ts
+    |-- index.ts
+    |-- navigation.ts
+    |-- personalInfo.ts
+    |-- projects.ts
+    |-- skills.ts
+    |-- socialLinks.ts
+    |-- testimonials.ts
   |- lib/
     |-- motion.ts
     |-- utils.ts
   |- public/
   |- .eslintrc.json
   |- .gitignore
+  |- CONTENT_EXTRACTION.ts
+  |- CONTENT_INTEGRATION_GUIDE.ts
   |- eslint.config.mjs
   |- netlify.toml
   |- next.config.js
