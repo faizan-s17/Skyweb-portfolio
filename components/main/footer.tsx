@@ -5,8 +5,8 @@ import { personalInfo, contactInfo } from "@/data";
 
 export const Footer = () => {
   return (
-    <footer className="w-full bg-transparent text-gray-200 px-4 py-8">
-      <div className="max-w-6xl w-full glass-panel rounded-xl mx-auto px-6 py-10">
+    <footer className="w-full bg-transparent text-gray-200 px-4 sm:px-6 md:px-10 py-8 md:py-12">
+      <div className="max-w-6xl w-full glass-panel rounded-xl mx-auto px-6 sm:px-8 md:px-10 py-10 md:py-12">
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {/* Left: Site / Contact */}
           <div className="flex flex-col items-start">

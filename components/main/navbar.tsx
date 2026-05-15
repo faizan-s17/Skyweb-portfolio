@@ -99,7 +99,7 @@ export const Navbar = () => {
   return (
     <header className="w-full h-[65px] fixed top-0 shadow-lg shadow-[#2A0E61]/45 bg-[#03001433] backdrop-blur-xl z-50 px-6 md:px-10 border-b border-purple-500/15">
       {/* Navbar Container */}
-      <div className="w-full h-full flex items-center justify-between m-auto px-[10px]">
+      <div className="mx-auto max-w-screen-xl w-full h-full flex items-center justify-between px-4 sm:px-6 md:px-10">
         {/* Logo + Name */}
         <Link
           href="#about-me"
@@ -124,7 +124,7 @@ export const Navbar = () => {
 
         {/* Web Navbar */}
         <nav
-          className="hidden md:flex w-[640px] h-full flex-row items-center justify-between md:mr-6"
+          className="hidden md:flex w-full max-w-[640px] h-full flex-row items-center justify-between md:mr-6"
           aria-label="Primary"
         >
           <div className="flex items-center justify-between w-full h-auto border border-[rgba(112,66,248,0.32)] bg-[rgba(6,2,24,0.46)] mr-[15px] px-[12px] py-[10px] rounded-full text-gray-200 backdrop-blur-xl shadow-[0_0_22px_rgba(112,66,248,0.14)] interactive-surface">
@@ -162,7 +162,7 @@ export const Navbar = () => {
 
         {/* Hamburger Menu */}
         <button
-          className="md:hidden text-white text-4xl rounded-md transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+          className="md:hidden h-12 w-12 flex items-center justify-center text-white text-2xl rounded-md transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 hover:bg-purple-500/10"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-expanded={isMobileMenuOpen}
           aria-controls="mobile-nav-menu"
@@ -183,12 +183,12 @@ export const Navbar = () => {
         }`}
       >
           {/* Links */}
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-3 w-full">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.title}
                 href={link.link}
-                className={`${linkClassName(activeSection === link.link)} text-center`}
+                className={`${linkClassName(activeSection === link.link)} text-center min-h-[48px] flex items-center justify-center px-4`}
                 onClick={(event) => handleScrollToSection(event, link.link, true)}
                 aria-current={activeSection === link.link ? "page" : undefined}
               >
@@ -199,7 +199,7 @@ export const Navbar = () => {
           </div>
 
           {/* Social Icons */}
-          <div className="flex justify-center gap-6 mt-6">
+          <div className="flex justify-center gap-4 mt-8">
             {SOCIALS.map(({ link, name, icon: Icon }) => (
               <Link
                 href={link}
@@ -207,9 +207,9 @@ export const Navbar = () => {
                 rel="noreferrer noopener"
                 key={name}
                 aria-label={`Visit ${name}`}
-                className="rounded-md transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+                className="h-12 w-12 flex items-center justify-center rounded-md transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 hover:bg-purple-500/10"
               >
-                <Icon className="h-8 w-8 text-white" />
+                <Icon className="h-6 w-6 text-white" />
               </Link>
             ))}
           </div>
