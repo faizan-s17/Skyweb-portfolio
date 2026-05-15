@@ -10,73 +10,39 @@ import {
 } from "@/constants";
 
 export const Skills = () => {
+  const allSkills = [
+    ...SKILL_DATA,
+    ...FRONTEND_SKILL,
+    ...BACKEND_SKILL,
+    ...FULLSTACK_SKILL,
+    ...OTHER_SKILL,
+  ];
+
+  const uniqueSkills = allSkills.filter(
+    (skill, index, array) =>
+      array.findIndex((item) => item.skill_name === skill.skill_name) === index
+  );
+
   return (
     <section
       id="skills"
-      className="flex flex-col items-center justify-center gap-6 h-full relative overflow-hidden py-20"
+      className="flex flex-col items-center justify-center gap-8 h-full relative overflow-hidden py-20"
     >
       <SkillText />
 
-      <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 items-center max-w-4xl mx-auto">
-        {SKILL_DATA.map((skill, i) => (
-          <SkillDataProvider
-            key={skill.skill_name}
-            src={skill.image}
-            name={skill.skill_name}
-            width={skill.width}
-            height={skill.height}
-            index={i}
-          />
-        ))}
-      </div>
-
-      <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 items-center max-w-4xl mx-auto">
-        {FRONTEND_SKILL.map((skill, i) => (
-          <SkillDataProvider
-            key={skill.skill_name}
-            src={skill.image}
-            name={skill.skill_name}
-            width={skill.width}
-            height={skill.height}
-            index={i}
-          />
-        ))}
-      </div>
-      <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 items-center max-w-4xl mx-auto">
-        {BACKEND_SKILL.map((skill, i) => (
-          <SkillDataProvider
-            key={skill.skill_name}
-            src={skill.image}
-            name={skill.skill_name}
-            width={skill.width}
-            height={skill.height}
-            index={i}
-          />
-        ))}
-      </div>
-      <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 items-center max-w-4xl mx-auto">
-        {FULLSTACK_SKILL.map((skill, i) => (
-          <SkillDataProvider
-            key={skill.skill_name}
-            src={skill.image}
-            name={skill.skill_name}
-            width={skill.width}
-            height={skill.height}
-            index={i}
-          />
-        ))}
-      </div>
-      <div className="flex flex-row justify-center flex-wrap mt-4 gap-4 items-center max-w-4xl mx-auto">
-        {OTHER_SKILL.map((skill, i) => (
-          <SkillDataProvider
-            key={skill.skill_name}
-            src={skill.image}
-            name={skill.skill_name}
-            width={skill.width}
-            height={skill.height}
-            index={i}
-          />
-        ))}
+      <div className="mt-4 w-full max-w-6xl mx-auto px-4 sm:px-8">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-5 place-items-center">
+          {uniqueSkills.map((skill, i) => (
+            <SkillDataProvider
+              key={skill.skill_name}
+              src={skill.image}
+              name={skill.skill_name}
+              width={skill.width}
+              height={skill.height}
+              index={i}
+            />
+          ))}
+        </div>
       </div>
 
       <div className="w-full h-full absolute">
