@@ -5,7 +5,7 @@ export const Projects = () => {
   return (
     <section
       id="projects"
-      className="section-shell"
+      className="flex flex-col items-center justify-center py-20 px-5 md:px-10"
     >
       <h1 className="text-4xl md:text-5xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500 pb-14 md:pb-16 section-title">
         My Projects
