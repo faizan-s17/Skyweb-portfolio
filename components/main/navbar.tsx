@@ -110,11 +110,11 @@ export const Navbar = () => {
           <Image
             src="/logo.png"
             alt="Logo"
-            width={70}
-            height={70}
+            width={56}
+            height={56}
             draggable={false}
             loading="eager"
-            style={{ width: "auto", height: "auto" }}
+            style={{ width: "56px", height: "56px" }}
             className="cursor-pointer"
           />
           <div className="hidden md:flex font-bold ml-[10px] text-gray-300">
