@@ -57,14 +57,19 @@ export const SOCIALS_FOR_SPACE_PORTFOLIO = [
     link: "https://wa.me/447950328625",
   },
   {
-    name: "LinkedIn",
-    icon: "FiLinkedin",
-    link: "https://linkedin.com",
-  },
-  {
     name: "GitHub",
     icon: "FiGithub",
     link: "https://github.com",
+  },
+  {
+    name: "Instagram",
+    icon: "FiInstagram",
+    link: "https://www.instagram.com/theskyweb.uk?igsh=dzhiaHVuYjBiOTFh&utm_source=qr",
+  },
+  {
+    name: "Upwork",
+    icon: "FiMessageSquare",
+    link: "https://www.upwork.com/freelancers/~01c2a6207a8fe52c62?companyReference=1435937255329460225&mp_source=share",
   },
 ] as const;
 
@@ -102,7 +107,7 @@ export const SITE_CONFIG_FOR_SPACE = {
   
   author: {
     name: "Skyweb",
-    email: "hello@skyweb.co.uk",
+    email: "theskyweb.uk@gmail.com",
     url: "https://skyweb.co.uk",
   },
   
@@ -124,7 +129,7 @@ export const SITE_CONFIG_FOR_SPACE = {
 // ============================================================================
 
 export const CONTACT_FOR_SPACE = {
-  email: "hello@skyweb.co.uk",
+  email: "theskyweb.uk@gmail.com",
   whatsapp: "https://wa.me/447950328625",
 } as const;
 

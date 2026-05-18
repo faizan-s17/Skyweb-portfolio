@@ -5,7 +5,7 @@
 
 export const contactInfo = {
   // Direct contacts
-  email: "hello@skyweb.co.uk",
+  email: "theskyweb.uk@gmail.com",
   whatsapp: "https://wa.me/447950328625",
   phone: "+44 7950 328625",
   
@@ -66,7 +66,7 @@ export const contactInfo = {
   
   // Alternative contact methods
   alternativeContacts: {
-    email: "hello@skyweb.co.uk",
+    email: "theskyweb.uk@gmail.com",
     whatsapp: "https://wa.me/447950328625",
     upwork: "https://www.upwork.com/freelancers/~01c2a6207a8fe52c62",
   },

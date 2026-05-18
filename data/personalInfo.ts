@@ -16,7 +16,7 @@ export const personalInfo = {
     "We combine premium UI, practical automation, and conversion thinking so your website does more than look good. It helps your business win trust and generate demand.",
   
   // Contact
-  email: "hello@skyweb.co.uk",
+  email: "theskyweb.uk@gmail.com",
   location: "United Kingdom",
   
   // About Section

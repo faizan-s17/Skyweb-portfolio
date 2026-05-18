@@ -4,11 +4,17 @@
  */
 
 import {
+  FiMessageCircle,
+} from "react-icons/fi";
+
+import {
   RxGithubLogo,
   RxInstagramLogo,
-  RxTwitterLogo,
-  RxLinkedinLogo,
 } from "react-icons/rx";
+
+import {
+  SiUpwork,
+} from "react-icons/si";
 
 export const socials = [
   {
@@ -16,29 +22,25 @@ export const socials = [
     link: "https://wa.me/447950328625",
   },
   {
-    name: "LinkedIn",
-    link: "https://www.linkedin.com/in/skyweb",
-  },
-  {
     name: "GitHub",
     link: "https://github.com/skyweb",
   },
   {
     name: "Instagram",
-    link: "https://www.instagram.com/skyweb.co.uk",
+    link: "https://www.instagram.com/theskyweb.uk?igsh=dzhiaHVuYjBiOTFh&utm_source=qr",
   },
   {
-    name: "Twitter",
-    link: "https://x.com/skywebco",
+    name: "Upwork",
+    link: "https://www.upwork.com/freelancers/~01c2a6207a8fe52c62",
   },
 ] as const;
 
 // Original SOCIALS format with icons for components
 export const socialsWithIcons = [
   {
-    name: "LinkedIn",
-    icon: RxLinkedinLogo,
-    link: "https://www.linkedin.com/in/skyweb",
+    name: "WhatsApp",
+    icon: FiMessageCircle,
+    link: "https://wa.me/447950328625",
   },
   {
     name: "GitHub",
@@ -46,9 +48,14 @@ export const socialsWithIcons = [
     link: "https://github.com/skyweb",
   },
   {
-    name: "Twitter",
-    icon: RxTwitterLogo,
-    link: "https://x.com/skywebco",
+    name: "Instagram",
+    icon: RxInstagramLogo,
+    link: "https://www.instagram.com/theskyweb.uk?igsh=dzhiaHVuYjBiOTFh&utm_source=qr",
+  },
+  {
+    name: "Upwork",
+    icon: SiUpwork,
+    link: "https://www.upwork.com/freelancers/~01c2a6207a8fe52c62",
   },
 ] as const;
 
@@ -58,19 +65,24 @@ export const footerSocials = [
     title: "Social Media",
     data: [
       {
+        name: "WhatsApp",
+        icon: FiMessageCircle,
+        link: "https://wa.me/447950328625",
+      },
+      {
+        name: "GitHub",
+        icon: RxGithubLogo,
+        link: "https://github.com/skyweb",
+      },
+      {
         name: "Instagram",
         icon: RxInstagramLogo,
-        link: "https://www.instagram.com/skyweb.co.uk",
+        link: "https://www.instagram.com/theskyweb.uk?igsh=dzhiaHVuYjBiOTFh&utm_source=qr",
       },
       {
-        name: "X / Twitter",
-        icon: RxTwitterLogo,
-        link: "https://x.com/skywebco",
-      },
-      {
-        name: "LinkedIn",
-        icon: RxLinkedinLogo,
-        link: "https://www.linkedin.com/in/skyweb",
+        name: "Upwork",
+        icon: SiUpwork,
+        link: "https://www.upwork.com/freelancers/~01c2a6207a8fe52c62",
       },
     ],
   },

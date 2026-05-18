@@ -25,7 +25,7 @@ export const PERSONAL_IDENTITY = {
   specialization: "AI-Powered Websites & Web Development",
   
   // Contact Email
-  email: "hello@skyweb.co.uk",
+  email: "theskyweb.uk@gmail.com",
 } as const;
 
 // ============================================================================
@@ -319,13 +319,8 @@ export const SOCIAL_LINKS = [
     icon: "FiMessageCircle",
   },
   {
-    label: "LinkedIn",
-    href: "https://linkedin.com",
-    icon: "FiLinkedin",
-  },
-  {
     label: "Instagram",
-    href: "https://instagram.com",
+    href: "https://www.instagram.com/theskyweb.uk?igsh=dzhiaHVuYjBiOTFh&utm_source=qr",
     icon: "FiInstagram",
   },
   {
@@ -341,7 +336,7 @@ export const SOCIAL_LINKS = [
 ] as const;
 
 export const CONTACT_DETAILS = {
-  email: "hello@skyweb.co.uk",
+  email: "theskyweb.uk@gmail.com",
   whatsapp: "https://wa.me/447950328625",
   upwork: "https://www.upwork.com/freelancers/~01c2a6207a8fe52c62?companyReference=1435937255329460225&mp_source=share",
 } as const;
@@ -424,7 +419,7 @@ export const FORM_CONFIG = {
     errorMessage: "Something went wrong. Please try again or contact us directly.",
     
     contactMethods: {
-      email: "hello@skyweb.co.uk",
+      email: "theskyweb.uk@gmail.com",
       whatsapp: "https://wa.me/447950328625",
       fallbackText: "Or reach out directly via WhatsApp or email.",
     },
