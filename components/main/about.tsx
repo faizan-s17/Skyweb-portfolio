@@ -22,9 +22,9 @@ export const About = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.35 }}
-        className="w-full flex flex-col items-center text-center mb-12 section-reveal"
+        className="w-full flex flex-col items-center text-center mb-8 section-reveal"
       >
-        <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500 mb-6 section-title">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500 mb-4 section-title">
           {about.headline}
         </h2>
         <p className="text-base md:text-lg text-gray-300 max-w-2xl section-subtitle">
@@ -38,7 +38,7 @@ export const About = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
-        className="w-full mb-16"
+        className="w-full mb-12"
       >
         <h3 className="text-2xl font-semibold text-white mb-8 text-center section-title">
           Our Foundation

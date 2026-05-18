@@ -5,15 +5,15 @@ export const Projects = () => {
   return (
     <section
       id="projects"
-      className="flex flex-col items-center justify-center py-20 px-5 md:px-10"
+      className="flex flex-col items-center justify-center py-10 md:py-14 px-5 md:px-10"
     >
-      <h1 className="text-4xl md:text-5xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500 pb-14 md:pb-16 section-title">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500 pb-8 md:pb-10 section-title">
         Recent Client Work
       </h1>
-      <p className="text-base md:text-lg text-gray-300 max-w-2xl text-center mb-12 section-subtitle">
+      <p className="text-sm sm:text-base md:text-lg text-gray-300 max-w-2xl text-center mb-8 section-subtitle">
         Websites built for real businesses. Each one designed to help get more calls, enquiries, bookings, and sales.
       </p>
-      <div className="h-full w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+      <div className="h-full w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         {PROJECTS.map((project) => (
           <ProjectCard
             key={project.title}

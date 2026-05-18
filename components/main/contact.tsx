@@ -139,9 +139,9 @@ export const Contact = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.35 }}
-        className="w-full max-w-6xl text-center mb-12 section-reveal"
+        className="w-full max-w-6xl text-center mb-8 section-reveal"
       >
-        <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500 mb-6 section-title">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500 mb-4 section-title\">
           {contactInfo.cta.main.title}
         </h2>
         <p className="text-base md:text-lg text-gray-300 max-w-3xl mx-auto section-subtitle">
@@ -149,7 +149,7 @@ export const Contact = () => {
         </p>
       </motion.div>
 
-      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
+      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8\">
         <motion.div
           variants={slideInFromLeft(0.2)}
           initial="hidden"
@@ -207,7 +207,7 @@ export const Contact = () => {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 to-purple-500/0 group-hover:from-cyan-500/5 group-hover:to-purple-500/5 transition-all duration-300" />
 
-          <div className="relative z-10 space-y-5">
+          <div className="relative z-10 space-y-4\">
             {contactInfo.form.fields.map((field) => {
               const hasError = Boolean(errors[field.name] && touched[field.name]);
               const inputId = `contact-${field.name}`;
@@ -230,7 +230,7 @@ export const Contact = () => {
                       value={values[field.name]}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      rows={5}
+                      rows={4}
                       maxLength={1200}
                       placeholder={field.placeholder}
                       aria-invalid={hasError}

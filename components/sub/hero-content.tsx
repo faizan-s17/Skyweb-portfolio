@@ -18,9 +18,9 @@ export const HeroContent = () => {
     <motion.div
       initial="hidden"
       animate="visible"
-      className="flex flex-col md:flex-row items-center justify-center px-4 sm:px-6 md:px-20 mt-24 md:mt-40 w-full z-[20]"
+      className="flex flex-col md:flex-row items-center justify-center px-4 sm:px-6 md:px-20 mt-8 md:mt-16 w-full z-[20]"
     >
-      <div className="h-full w-full flex flex-col gap-5 justify-center m-auto text-start">
+      <div className="h-full w-full flex flex-col gap-3 md:gap-5 justify-center m-auto text-start">
         <motion.div
           variants={slideInFromTop}
           className="Welcome-box py-[8px] px-[10px] border border-[#7042f88b] opacity-[0.95]"
@@ -33,7 +33,7 @@ export const HeroContent = () => {
 
         <motion.div
           variants={slideInFromLeft(0.5)}
-          className="flex flex-col gap-4 md:gap-6 mt-4 md:mt-6 text-3xl sm:text-4xl md:text-6xl font-bold text-white max-w-[650px] w-auto h-auto leading-[1.08] section-title"
+          className="flex flex-col gap-2 md:gap-4 mt-2 md:mt-4 text-2xl sm:text-3xl md:text-5xl font-bold text-white max-w-[650px] w-auto h-auto leading-[1.08] section-title"
         >
           <span>
             {hero.headline.split(" ").map((word, idx) => {
@@ -57,7 +57,7 @@ export const HeroContent = () => {
 
         <motion.p
           variants={slideInFromLeft(0.8)}
-          className="text-sm sm:text-base md:text-lg text-gray-300 my-3 md:my-5 max-w-[620px] leading-relaxed font-light section-subtitle"
+          className="text-xs sm:text-sm md:text-base text-gray-300 my-2 md:my-3 max-w-[620px] leading-relaxed font-light section-subtitle"
         >
           {hero.subheading}
         </motion.p>
@@ -65,7 +65,7 @@ export const HeroContent = () => {
         {/* Benefit Chips */}
         <motion.div
           variants={slideInFromLeft(0.9)}
-          className="flex flex-wrap gap-2 my-4 md:my-6"
+          className="flex flex-wrap gap-2 my-2 md:my-3"
         >
           {hero.benefitChips?.map((chip, idx) => (
             <span
