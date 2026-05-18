@@ -169,17 +169,17 @@ export const Contact = () => {
             <div className="space-y-4">
               <a
                 href={`mailto:${contactInfo.email}`}
-                className="flex items-center justify-between rounded-lg border border-purple-500/30 bg-purple-500/10 px-4 py-3 text-gray-200 interactive-button hover:border-purple-400 hover:bg-purple-500/20"
+                className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-1 sm:gap-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-4 py-3 text-gray-200 interactive-button hover:border-purple-400 hover:bg-purple-500/20"
               >
                 <span className="text-sm text-gray-300">Email</span>
-                <span className="font-medium">{contactInfo.email}</span>
+                <span className="font-medium text-sm sm:text-base break-all sm:break-normal">{contactInfo.email}</span>
               </a>
 
               <a
                 href={contactInfo.whatsapp}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="flex items-center justify-between rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-gray-200 interactive-button hover:border-cyan-400 hover:bg-cyan-500/20"
+                className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-1 sm:gap-2 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-gray-200 interactive-button hover:border-cyan-400 hover:bg-cyan-500/20"
               >
                 <span className="text-sm text-gray-300">WhatsApp</span>
                 <span className="font-medium">Chat Now</span>
@@ -187,7 +187,7 @@ export const Contact = () => {
 
               <a
                 href={`tel:${contactInfo.phone.replace(/\s+/g, "")}`}
-                className="flex items-center justify-between rounded-lg border border-purple-500/30 bg-purple-500/10 px-4 py-3 text-gray-200 interactive-button hover:border-purple-400 hover:bg-purple-500/20"
+                className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-1 sm:gap-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-4 py-3 text-gray-200 interactive-button hover:border-purple-400 hover:bg-purple-500/20"
               >
                 <span className="text-sm text-gray-300">Phone</span>
                 <span className="font-medium">{contactInfo.phone}</span>

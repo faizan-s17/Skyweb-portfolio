@@ -86,13 +86,29 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 5rem 1.25rem;
+  padding: 3rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .section-shell {
+    padding: 4rem 1.25rem;
+  }
 }
 
 @media (min-width: 768px) {
   .section-shell {
-    padding-left: 5rem;
-    padding-right: 5rem;
+    padding: 5rem 5rem;
+  }
+}
+
+/* Scale down decorative orbs on mobile to prevent overflow */
+@media (max-width: 639px) {
+  .section-orb-top-left,
+  .section-orb-top-right,
+  .section-orb-bottom-right,
+  .section-orb-bottom-left {
+    width: 12rem;
+    height: 12rem;
   }
 }
 
@@ -223,6 +239,15 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 90px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ensure interactive elements have proper touch targets on mobile */
+@media (max-width: 639px) {
+  .interactive-button {
+    min-height: 44px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

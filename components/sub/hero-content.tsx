@@ -18,7 +18,7 @@ export const HeroContent = () => {
     <motion.div
       initial="hidden"
       animate="visible"
-      className="flex flex-row items-center justify-center px-6 md:px-20 mt-40 w-full z-[20]"
+      className="flex flex-col md:flex-row items-center justify-center px-4 sm:px-6 md:px-20 mt-24 md:mt-40 w-full z-[20]"
     >
       <div className="h-full w-full flex flex-col gap-5 justify-center m-auto text-start">
         <motion.div
@@ -33,7 +33,7 @@ export const HeroContent = () => {
 
         <motion.div
           variants={slideInFromLeft(0.5)}
-          className="flex flex-col gap-6 mt-6 text-4xl md:text-6xl font-bold text-white max-w-[650px] w-auto h-auto leading-[1.08] section-title"
+          className="flex flex-col gap-4 md:gap-6 mt-4 md:mt-6 text-3xl sm:text-4xl md:text-6xl font-bold text-white max-w-[650px] w-auto h-auto leading-[1.08] section-title"
         >
           <span>
             {hero.headline.split(" ").map((word, idx) => {
@@ -57,24 +57,24 @@ export const HeroContent = () => {
 
         <motion.p
           variants={slideInFromLeft(0.8)}
-          className="text-base md:text-lg text-gray-300 my-5 max-w-[620px] leading-relaxed font-light section-subtitle"
+          className="text-sm sm:text-base md:text-lg text-gray-300 my-3 md:my-5 max-w-[620px] leading-relaxed font-light section-subtitle"
         >
           {hero.subheading}
         </motion.p>
 
         <motion.div
           variants={slideInFromLeft(1)}
-          className="flex flex-row gap-4 my-2 section-reveal"
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 my-2 section-reveal"
         >
           <a
             href={hero.cta.primary.href}
-            className="py-3 px-6 button-primary interactive-button text-center text-white cursor-pointer rounded-lg font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+            className="py-3 px-6 button-primary interactive-button text-center text-white cursor-pointer rounded-lg font-semibold text-sm sm:text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
           >
             {hero.cta.primary.text}
           </a>
           <a
             href={hero.cta.secondary.href}
-            className="py-3 px-6 border border-purple-500/80 interactive-button text-center text-white cursor-pointer rounded-lg font-semibold hover:bg-purple-500/10 hover:border-purple-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+            className="py-3 px-6 border border-purple-500/80 interactive-button text-center text-white cursor-pointer rounded-lg font-semibold text-sm sm:text-base hover:bg-purple-500/10 hover:border-purple-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
           >
             {hero.cta.secondary.text}
           </a>
@@ -83,7 +83,7 @@ export const HeroContent = () => {
 
       <motion.div
         variants={slideInFromRight(0.8)}
-        className="w-full h-full flex justify-center items-center"
+        className="hidden md:flex w-full h-full justify-center items-center"
       >
         <Image
           src="/hero-bg.svg"
