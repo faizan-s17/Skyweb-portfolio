@@ -297,6 +297,10 @@ export const Contact = () => {
             >
               {isSubmitting ? submitLabel : contactInfo.form.submitButton}
             </button>
+
+            <p className="text-xs sm:text-sm text-gray-400 text-center mt-2">
+              {contactInfo.form.reassurance}
+            </p>
           </div>
         </motion.form>
       </div>

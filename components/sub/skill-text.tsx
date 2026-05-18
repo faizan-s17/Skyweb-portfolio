@@ -18,7 +18,7 @@ export const SkillText = () => {
       >
         <SparklesIcon className="text-[#b49bff] mr-[10px] h-5 w-5" />
         <h1 className="Welcome-text text-[13px]">
-          Think better with Next.js 14
+          Tools that help your business perform better
         </h1>
       </motion.div>
 
@@ -26,14 +26,14 @@ export const SkillText = () => {
         variants={slideInFromLeft(0.5)}
         className="text-[22px] sm:text-[26px] md:text-[30px] text-white font-medium mt-[10px] text-center mb-[15px] px-4"
       >
-        Making apps with modern technologies.
+        Technology That Helps Your Business Website Perform Better
       </motion.div>
 
       <motion.div
         variants={slideInFromRight(0.5)}
         className="cursive text-[16px] sm:text-[18px] md:text-[20px] text-gray-200 mb-10 mt-[10px] text-center px-4"
       >
-        Never miss a task, deadline or idea.
+        We use modern tools behind the scenes so your website loads fast, works smoothly, and is easy to scale.
       </motion.div>
     </div>
   );

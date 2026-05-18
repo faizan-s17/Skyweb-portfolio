@@ -5,22 +5,22 @@
 
 export const testimonials = [
   {
-    name: "Amelia Grant",
-    role: "Founder, Grant Wellness Studio",
+    name: "Client Name",
+    role: "Local Service Business",
     rating: 5,
-    quote: "The website looked premium from day one and the enquiry quality improved almost immediately.",
+    quote: "Skyweb helped us turn a basic online presence into a professional website that feels much easier for customers to trust.",
   },
   {
-    name: "Dylan Brooks",
-    role: "Startup Operator",
+    name: "Client Name",
+    role: "UK Business Owner",
     rating: 5,
-    quote: "Clear communication, fast turnaround, and a very strong understanding of conversion and UX.",
+    quote: "The process was clear, fast, and focused on what actually matters — getting more enquiries.",
   },
   {
-    name: "Nadia Patel",
-    role: "E-Commerce Brand Owner",
+    name: "Client Name",
+    role: "Small Business",
     rating: 5,
-    quote: "Our new site feels more trustworthy, loads faster, and is set up properly for SEO growth.",
+    quote: "Our new website looks premium on mobile and makes it much easier for people to contact us.",
   },
 ] as const;
 
@@ -28,38 +28,38 @@ export const services = [
   {
     title: "Full Website Development",
     icon: "development",
-    description: "Custom website builds with a premium visual system, responsive layouts, and performance-minded implementation.",
-    highlights: ["Custom design", "Mobile responsive", "Fast performance"],
+    description: "Build a professional website that makes your business look trusted and helps visitors contact you faster.",
+    highlights: ["Mobile-friendly design", "Clear service pages", "Fast loading speed", "Contact & WhatsApp CTAs"],
   },
   {
     title: "SEO Services",
     icon: "seo",
-    description: "Search-ready website architecture with on-page SEO, technical SEO, and keyword-focused structure.",
-    highlights: ["On-page SEO", "Technical SEO", "Ranking strategy"],
+    description: "Make your website easier to find on Google with clean structure, page titles, and local search basics.",
+    highlights: ["Local SEO setup", "Search-friendly pages", "Better Google visibility"],
   },
   {
     title: "Hosting & Domain",
     icon: "hosting",
-    description: "We help with setup, ongoing maintenance, and security-minded deployment guidance.",
-    highlights: ["Setup", "Maintenance", "Security"],
+    description: "We help you get your website online smoothly without confusing technical steps.",
+    highlights: ["Domain setup", "Hosting support", "Website maintenance"],
   },
   {
     title: "AI Automated Websites",
     icon: "ai",
-    description: "Automate content capture, lead routing, and intelligent customer interactions from the first visit.",
-    highlights: ["AI content generation", "Smart forms", "Automation workflows"],
+    description: "Turn your website into a lead-handling system that captures details and helps you respond faster.",
+    highlights: ["Smart forms", "Lead routing", "Auto replies", "AI assistance"],
   },
   {
     title: "Chatbots",
     icon: "chatbot",
-    description: "Website and WhatsApp chatbots designed to answer questions and route leads automatically.",
-    highlights: ["WhatsApp bots", "Website bots", "Customer automation"],
+    description: "Answer common customer questions and guide visitors to contact, book, or buy.",
+    highlights: ["WhatsApp chatbot", "Website chatbot", "Customer FAQs"],
   },
   {
     title: "Conversion Strategy",
     icon: "global",
-    description: "A conversion-first layout approach with strong CTAs, trust signals, and friction removal.",
-    highlights: ["CTA strategy", "Trust blocks", "Lead flow optimization"],
+    description: "Improve your website layout so more visitors take action instead of leaving.",
+    highlights: ["Stronger CTAs", "Trust sections", "Better lead flow"],
   },
 ] as const;
 

@@ -11,9 +11,9 @@ export const personalInfo = {
   tagline: "UK-Focused AI Web Studio",
   
   // Bio & Description
-  bio: "High-performance, AI-powered websites for UK businesses, startups, and service brands.",
+  bio: "Skyweb builds fast, mobile-friendly websites for UK businesses that want more calls, enquiries, bookings, and trust online.",
   description:
-    "We combine premium UI, practical automation, and conversion thinking so your website does more than look good. It helps your business win trust and generate demand.",
+    "We design premium, mobile-friendly websites that help UK businesses get more calls, enquiries, bookings, and trust — without confusing tech or slow delivery.",
   
   // Contact
   email: "theskyweb.uk@gmail.com",
@@ -21,89 +21,106 @@ export const personalInfo = {
   
   // About Section
   about: {
-    headline: "A Lean, UK-Focused Agency Built for Modern Growth",
+    headline: "Why UK Businesses Trust Skyweb",
     description:
-      "We combine premium UI, practical automation, and conversion thinking so your website does more than look good. It helps your business win trust and generate demand.",
+      "We focus on what matters: fast websites, clear communication, and results that bring more calls and enquiries.",
     
     values: [
       {
-        title: "Mission",
-        description: "Build websites that feel premium, perform fast, and help businesses generate leads consistently.",
+        title: "More Calls & Enquiries",
+        description: "Every page is designed to help visitors contact you, book, or buy.",
       },
       {
-        title: "Why UK-Based Matters",
-        description: "Clear communication, business trust, and a professional delivery standard clients can rely on.",
+        title: "Fast Website Speed",
+        description: "Visitors leave slow websites. We build sites that load instantly and keep people engaged.",
       },
       {
-        title: "Journey",
-        description: "From simple builds to AI-enabled systems, the focus stays on speed, clarity, and measurable outcomes.",
+        title: "Mobile-First Design",
+        description: "Your site works smoothly on phones, tablets, and desktops where most customers browse.",
       },
       {
-        title: "Team",
-        description: "A lean, agile setup with design, development, SEO, and automation capabilities ready to scale.",
+        title: "Setup & Support",
+        description: "From domain setup to ongoing updates. We're here after launch too.",
       },
     ] as const,
     
     teamCapabilities: [
       {
-        title: "Strategy",
-        description: "Positioning and conversion",
+        title: "Design",
+        description: "Premium, trustworthy layouts",
       },
       {
-        title: "Design & Dev",
-        description: "Modern UI and clean builds",
+        title: "Conversion",
+        description: "Clear CTAs and lead capture",
       },
       {
         title: "Automation",
-        description: "AI workflows and lead capture",
+        description: "Chatbots, forms, and AI help",
       },
     ] as const,
   },
   
   // Hero Section
   hero: {
-    headline: "We Build Smart, AI-Powered Websites That Grow Your Business",
-    subheading: "From design to deployment, everything is handled with a speed-first, conversion-focused approach that helps you win more leads and more trust.",
+    headline: "Your Website Isn't Bringing Clients? We Build Fast AI Websites That Generate Leads.",
+    subheading: "We design premium, mobile-friendly websites that help UK businesses get more calls, enquiries, bookings, and trust — without confusing tech or slow delivery.",
     badge: "UK-Focused AI Web Studio",
     
+    trustLine: "Free audit • Reply within 24 hours • No pressure",
+    
+    benefitChips: [
+      { label: "More Calls" },
+      { label: "Faster Website" },
+      { label: "Better Trust" },
+    ] as const,
+    
     metrics: [
-      { value: "48h", label: "Fast Delivery" },
-      { value: "90+", label: "Lighthouse Target" },
-      { value: "24/7", label: "Support Mindset" },
-      { value: "AI", label: "Automation Ready" },
+      { value: "24h", label: "Average response" },
+      { value: "UK-Focused", label: "Support" },
+      { value: "Lead-Focused", label: "Design" },
+      { value: "Mobile-First", label: "Builds" },
     ] as const,
     
     cta: {
       primary: {
-        text: "Get a Free Quote",
+        text: "Get My Free Website Audit",
         href: "/contact",
       },
       secondary: {
-        text: "View Our Work",
+        text: "View Client-Ready Demos",
         href: "#projects",
       },
     },
   },
   
-  // Why Choose Us
+  // Why Choose Us / Trust Section
   whyChooseUs: {
-    headline: "Built for Trust, Speed, and Higher Conversion Rates",
+    headline: "Built to help small businesses look trusted and get contacted.",
+    subheading: "We focus on what actually matters: clear communication, fast builds, and websites that bring enquiries.",
     reasons: [
       {
+        title: "Clear Communication",
+        description: "You understand every step. No technical jargon, just honest updates.",
+      },
+      {
         title: "Fast Delivery",
-        description: "Launch-ready builds with premium polish and speed-first implementation.",
+        description: "Get your site online without weeks of waiting. Launch-ready in days, not months.",
       },
       {
-        title: "UK-Based Professionalism",
-        description: "Clear communication, trusted business standards, and local-market awareness.",
+        title: "Conversion-Focused Layouts",
+        description: "Every page is designed to help visitors contact you, book, or buy. Not just look good.",
       },
       {
-        title: "AI Integration",
-        description: "Automation workflows, chatbot experiences, and smart content support.",
+        title: "WhatsApp & Contact Form Setup",
+        description: "Make it easy for customers to reach you. Automated responses to enquiries.",
       },
       {
-        title: "24/7 Support Mindset",
-        description: "Reliable handoff, clear documentation, and ongoing maintenance options.",
+        title: "SEO-Ready Structure",
+        description: "Built for Google search. Better visibility means more visitors and more leads.",
+      },
+      {
+        title: "Ongoing Support Available",
+        description: "Updates, fixes, and maintenance. We're here after launch too.",
       },
     ] as const,
   },

@@ -62,9 +62,24 @@ export const HeroContent = () => {
           {hero.subheading}
         </motion.p>
 
+        {/* Benefit Chips */}
         <motion.div
-          variants={slideInFromLeft(1)}
-          className="flex flex-col sm:flex-row gap-3 sm:gap-4 my-2 section-reveal"
+          variants={slideInFromLeft(0.9)}
+          className="flex flex-wrap gap-2 my-4 md:my-6"
+        >
+          {hero.benefitChips?.map((chip, idx) => (
+            <span
+              key={idx}
+              className="px-3 py-1 text-xs sm:text-sm bg-purple-500/20 text-purple-200 rounded-full border border-purple-500/30"
+            >
+              ✓ {chip.label}
+            </span>
+          ))}
+        </motion.div>
+
+        <motion.div
+          variants={slideInFromLeft(0.95)}
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 my-4 section-reveal"
         >
           <a
             href={hero.cta.primary.href}
@@ -79,6 +94,14 @@ export const HeroContent = () => {
             {hero.cta.secondary.text}
           </a>
         </motion.div>
+
+        {/* Trust Line */}
+        <motion.p
+          variants={slideInFromLeft(1)}
+          className="text-xs sm:text-sm text-gray-400 mt-3"
+        >
+          {hero.trustLine}
+        </motion.p>
       </div>
 
       <motion.div

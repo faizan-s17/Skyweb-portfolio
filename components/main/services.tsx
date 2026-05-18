@@ -33,10 +33,10 @@ export const Services = () => {
         className="w-full flex flex-col items-center text-center mb-12 section-reveal"
       >
         <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500 mb-6 section-title">
-          Our Services
+          Services That Help Your Business
         </h2>
         <p className="text-base md:text-lg text-gray-300 max-w-2xl section-subtitle">
-          Comprehensive solutions designed to help your business grow, convert, and succeed online.
+          From building fast websites to capturing leads, we focus on what actually helps your business grow.
         </p>
       </motion.div>
 

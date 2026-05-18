@@ -7,7 +7,11 @@ export const projects = [
   {
     title: "Northstar Fitness",
     description:
-      "Conversion-focused gym platform with premium UI, streamlined booking, and local lead capture built for growth.",
+      "Gym needed a premium site that makes bookings easier.",
+    businessType: "Fitness / Gym",
+    problemSolved: "Needed a premium site that makes bookings easier.",
+    conversionGoal: "Increase class enquiries and sign-ups.",
+    keyFeatures: ["Booking-focused layout", "Local lead capture", "Mobile-first design"],
     image: "/projects/project-1.png",
     imageAlt: "Northstar Fitness project preview",
     liveDemo: "https://northstar-fitness-demo.vercel.app",
@@ -23,7 +27,11 @@ export const projects = [
   {
     title: "Apex Legal",
     description:
-      "Polished legal services site designed for trust, stronger consultation intent, and search visibility.",
+      "Legal services needed a trust-focused website for consultation enquiries.",
+    businessType: "Legal Services",
+    problemSolved: "Needed a trust-focused website for consultation enquiries.",
+    conversionGoal: "Increase consultation requests.",
+    keyFeatures: ["Professional layout", "Trust-focused sections", "Clear CTA flow"],
     image: "/projects/project-2.png",
     imageAlt: "Apex Legal project preview",
     liveDemo: "https://apex-legal-demo.vercel.app",
@@ -39,7 +47,11 @@ export const projects = [
   {
     title: "Luna Commerce",
     description:
-      "AI-ready e-commerce storefront with richer product storytelling, smarter recommendations, and smoother checkout.",
+      "E-commerce needed a smoother product browsing and checkout experience.",
+    businessType: "E-commerce",
+    problemSolved: "Needed a smoother product browsing and checkout experience.",
+    conversionGoal: "Increase product interest and online sales.",
+    keyFeatures: ["Product storytelling", "Secure checkout", "AI-ready structure"],
     image: "/projects/project-3.png",
     imageAlt: "Luna Commerce project preview",
     liveDemo: "https://luna-commerce-demo.vercel.app",
@@ -55,7 +67,11 @@ export const projects = [
   {
     title: "Sci-Sol Consultants",
     description:
-      "Professional regulatory consulting website for the pharmaceutical industry, featuring a modern corporate design, responsive user experience, and trust-focused digital presence.",
+      "Pharmaceutical consulting needed a corporate website that builds industry trust.",
+    businessType: "Pharmaceutical / Regulatory Consulting",
+    problemSolved: "Needed a corporate website that builds industry trust.",
+    conversionGoal: "Improve credibility and enquiry flow.",
+    keyFeatures: ["Professional design", "Responsive layout", "Service-focused content"],
     image: "/projects/scisol.png",
     imageAlt: "Sci-Sol Consultants project preview",
     liveDemo: "https://scientificsolution.pk",

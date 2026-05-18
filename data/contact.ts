@@ -17,50 +17,57 @@ export const contactInfo = {
         label: "Your Name",
         type: "text",
         required: true,
-        placeholder: "John Doe",
+        placeholder: "Your Name",
       },
       {
         name: "email",
-        label: "Email Address",
+        label: "Your Email Address",
         type: "email",
         required: true,
-        placeholder: "you@example.com",
+        placeholder: "your@email.com",
       },
       {
         name: "business",
-        label: "Business/Project Name",
+        label: "Your Business Name or Website Link",
         type: "text",
         required: false,
-        placeholder: "Your Project",
+        placeholder: "Your business name or website URL",
       },
       {
         name: "message",
-        label: "Tell us about your project",
+        label: "Tell us what you need help with",
         type: "textarea",
         required: true,
-        placeholder: "Describe your project needs...",
+        placeholder: "Example: new website, redesign, more leads, booking system, chatbot, SEO, or online payments.",
       },
     ] as const,
     
-    submitButton: "Send Message",
+    submitButton: "Request My Free Audit",
     submittingButton: "Sending...",
     
     messages: {
-      success: "Message sent successfully! We'll get back to you within 24 hours.",
+      success: "Message sent successfully! We'll review your details and reply within 24 hours.",
       error: "Something went wrong. Please try again or contact us directly.",
       fallback: "Thank you! We've received your message. We'll be in touch soon.",
     },
+    reassurance: "No pressure. We'll reply with honest suggestions.",
   },
   
   // CTA Sections
   cta: {
     main: {
-      title: "Let's Build Something Amazing",
-      description: "If you need a website that looks premium, loads fast, and turns visitors into leads, we should talk.",
+      title: "Let's Turn Your Website Into a Client-Getting System",
+      description: "Tell us about your business and we'll suggest the best website, automation, or lead-generation setup for your goals.",
     },
     contact: {
-      title: "Start with a Free Consultation",
-      description: "Use the form, email, WhatsApp, or social links to get in touch. Let's discuss your project and create a clear roadmap.",
+      title: "Direct Contact & Free Audit",
+      description: "Email, WhatsApp, or complete the form below. We'll review your homepage, speed, trust signals, and CTA flow.",
+    },
+    urgency: {
+      title: "Want to know why your website is not getting enough enquiries?",
+      description: "Send your website link and we'll review your homepage, speed, trust signals, and CTA flow.",
+      cta: "Request Free Homepage Review",
+      note: "Limited weekly review slots available.",
     },
   },
   
