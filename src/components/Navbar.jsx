@@ -62,7 +62,7 @@ export default function Navbar() {
           </a>
 
           {/* Desktop links */}
-          <ul className="hidden md:flex items-center gap-8">
+          <ul className="hidden lg:flex items-center gap-8">
             {links.map((l) => (
               <li key={l.label}>
                 <button
@@ -77,7 +77,7 @@ export default function Navbar() {
           </ul>
 
           {/* CTA */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-4">
             <a href="mailto:theskyweb.uk@gmail.com" className="btn-primary text-xs px-5 py-2.5">
               Get a Free Quote
             </a>
@@ -100,7 +100,7 @@ export default function Navbar() {
 
           {/* Hamburger */}
           <button
-            className="md:hidden text-white/70 hover:text-white transition-colors"
+            className="lg:hidden text-white/70 hover:text-white transition-colors"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
           >
@@ -117,7 +117,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
-            className="fixed top-20 inset-x-0 bottom-0 z-40 bg-bg-primary/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden"
+            className="fixed top-20 inset-x-0 bottom-0 z-40 bg-bg-primary/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 lg:hidden"
           >
             {links.map((l, i) => (
               <motion.button
