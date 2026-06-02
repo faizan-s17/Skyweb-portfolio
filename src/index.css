@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Adjusted fallback fonts to minimise layout shift during font swap.
+ * Values approximate Space Grotesk and Inter metrics against Arial,
+ * so the fallback text occupies nearly the same space as the web font.
+ */
+@font-face {
+  font-family: 'Space Grotesk Fallback';
+  src: local('Arial');
+  ascent-override: 93.92%;
+  descent-override: 24.65%;
+  line-gap-override: 0%;
+  size-adjust: 103.73%;
+}
+
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial');
+  ascent-override: 90.20%;
+  descent-override: 22.48%;
+  line-gap-override: 0%;
+  size-adjust: 107.64%;
+}
+
 @layer base {
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -144,4 +167,18 @@
 @keyframes marquee {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
+}
+
+/* Canvas fade-in — smooth appearance after lazy load */
+@keyframes fadeInCanvas {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Skip rendering off-screen sections until they near the viewport */
+#work,
+#process,
+#stats {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 700px;
 }

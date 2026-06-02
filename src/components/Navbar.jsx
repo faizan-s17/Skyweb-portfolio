@@ -55,7 +55,7 @@ export default function Navbar() {
             onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
             className="flex items-center gap-2 group"
           >
-            <img src={logo} alt="SkyWeb Logo" className="h-10 w-auto" />
+            <img src={logo} alt="SkyWeb Logo" width="40" height="40" className="h-10 w-auto" />
             <span className="font-heading font-bold text-lg tracking-tight text-white group-hover:text-accent-teal transition-colors duration-300">
               SkyWeb
             </span>

@@ -28,7 +28,7 @@ function Counter({ value, suffix, color }) {
   }, [inView, value])
 
   return (
-    <span ref={ref} className="font-heading font-bold text-5xl md:text-6xl" style={{ color }}>
+    <span ref={ref} className="font-heading font-bold text-5xl md:text-6xl" style={{ color, fontVariantNumeric: 'tabular-nums' }}>
       {count}{suffix}
     </span>
   )

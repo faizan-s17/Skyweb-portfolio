@@ -16,8 +16,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Space Grotesk', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'Inter Fallback', 'system-ui', 'sans-serif'],
+        heading: ['Space Grotesk', 'Space Grotesk Fallback', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       backgroundImage: {

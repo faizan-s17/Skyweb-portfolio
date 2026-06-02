@@ -1,125 +1,21 @@
-import { useEffect, useRef } from 'react'
+import { lazy, Suspense, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, ChevronDown } from 'lucide-react'
-import * as THREE from 'three'
+
+const HeroCanvas = lazy(() => import('./HeroCanvas'))
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 40, filter: 'blur(8px)' },
+  hidden: { opacity: 0, y: 30 },
   visible: (i = 0) => ({
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.9, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { duration: 0.6, delay: i * 0.07, ease: [0.25, 0.46, 0.45, 0.94] },
   }),
 }
 
 export default function Hero() {
-  const canvasRef = useRef(null)
   const spotlightRef = useRef(null)
 
-  /* ── Three.js scene ── */
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    const W = canvas.clientWidth
-    const H = canvas.clientHeight
-
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
-    renderer.setSize(W, H)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-
-    const scene = new THREE.Scene()
-    const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 100)
-    camera.position.z = 4
-
-    /* Icosahedron wireframe */
-    const icoGeo = new THREE.IcosahedronGeometry(1.4, 1)
-    const edges = new THREE.EdgesGeometry(icoGeo)
-    const lineMat = new THREE.LineBasicMaterial({ color: 0x00e5c0, transparent: true, opacity: 0.55 })
-    const wireframe = new THREE.LineSegments(edges, lineMat)
-    scene.add(wireframe)
-
-    /* Inner icosahedron (smaller, faster) */
-    const innerGeo = new THREE.IcosahedronGeometry(0.7, 0)
-    const innerEdges = new THREE.EdgesGeometry(innerGeo)
-    const innerMat = new THREE.LineBasicMaterial({ color: 0xff5722, transparent: true, opacity: 0.3 })
-    const innerFrame = new THREE.LineSegments(innerEdges, innerMat)
-    scene.add(innerFrame)
-
-    /* Particle cloud */
-    const particleCount = 600
-    const positions = new Float32Array(particleCount * 3)
-    for (let i = 0; i < particleCount; i++) {
-      const r = 2.2 + Math.random() * 2.5
-      const theta = Math.random() * Math.PI * 2
-      const phi = Math.acos(2 * Math.random() - 1)
-      positions[i * 3] = r * Math.sin(phi) * Math.cos(theta)
-      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
-      positions[i * 3 + 2] = r * Math.cos(phi)
-    }
-    const pGeo = new THREE.BufferGeometry()
-    pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    const pMat = new THREE.PointsMaterial({ color: 0x00e5c0, size: 0.025, transparent: true, opacity: 0.5 })
-    const particles = new THREE.Points(pGeo, pMat)
-    scene.add(particles)
-
-    /* Ambient ring */
-    const ringGeo = new THREE.TorusGeometry(2, 0.004, 2, 100)
-    const ringMat = new THREE.LineBasicMaterial({ color: 0x00e5c0, transparent: true, opacity: 0.15 })
-    const ring = new THREE.LineLoop(ringGeo, ringMat)
-    ring.rotation.x = Math.PI / 2
-    scene.add(ring)
-
-    /* Mouse state */
-    let mx = 0, my = 0
-    const onMouse = (e) => {
-      mx = (e.clientX / window.innerWidth - 0.5) * 2
-      my = (e.clientY / window.innerHeight - 0.5) * 2
-    }
-    window.addEventListener('mousemove', onMouse)
-
-    /* Animation loop */
-    let rafId
-    let tick = 0
-    const animate = () => {
-      rafId = requestAnimationFrame(animate)
-      tick += 0.005
-
-      wireframe.rotation.x += (my * 0.25 - wireframe.rotation.x) * 0.04
-      wireframe.rotation.y += (mx * 0.4 + tick - wireframe.rotation.y) * 0.04
-
-      innerFrame.rotation.x -= 0.008
-      innerFrame.rotation.y += 0.012
-
-      particles.rotation.y += 0.0008
-      particles.rotation.x += (my * 0.05 - particles.rotation.x) * 0.02
-
-      ring.rotation.z += 0.003
-
-      renderer.render(scene, camera)
-    }
-    animate()
-
-    /* Resize */
-    const onResize = () => {
-      const w = canvas.clientWidth
-      const h = canvas.clientHeight
-      renderer.setSize(w, h)
-      camera.aspect = w / h
-      camera.updateProjectionMatrix()
-    }
-    window.addEventListener('resize', onResize)
-
-    return () => {
-      cancelAnimationFrame(rafId)
-      window.removeEventListener('mousemove', onMouse)
-      window.removeEventListener('resize', onResize)
-      renderer.dispose()
-    }
-  }, [])
-
-  /* ── Cursor spotlight ── */
   useEffect(() => {
     const el = spotlightRef.current
     if (!el) return
@@ -147,10 +43,10 @@ export default function Hero() {
         }}
       />
 
-      {/* Three.js canvas */}
-      <div className="absolute inset-0 threejs-glow">
-        <canvas ref={canvasRef} className="w-full h-full" />
-      </div>
+      {/* Three.js canvas — lazy loaded so it doesn't block initial paint */}
+      <Suspense fallback={null}>
+        <HeroCanvas />
+      </Suspense>
 
       {/* Floating geometric shapes */}
       <motion.div
@@ -188,7 +84,7 @@ export default function Hero() {
           <span className="section-label text-[11px]">Digital Agency · Est. 2024</span>
         </motion.div>
 
-        {/* Headline */}
+        {/* Headline — no blur so LCP is measured at first paint, not animation end */}
         <motion.h1
           variants={fadeUp}
           initial="hidden"
@@ -255,7 +151,7 @@ export default function Hero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
+        transition={{ delay: 1.5 }}
         className="absolute bottom-3 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2"
       >
         <span className="text-white/25 text-[11px] font-mono tracking-widest uppercase">Scroll</span>
