@@ -1,4 +1,3 @@
-import CustomCursor from './components/CustomCursor'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import MarqueeBand from './components/MarqueeBand'
@@ -13,7 +12,6 @@ import Footer from './components/Footer'
 export default function App() {
   return (
     <>
-      <CustomCursor />
       <Navbar />
       <main>
         <Hero />

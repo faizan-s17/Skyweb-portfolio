@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
+import DentalDemo from './DentalDemo'
 
 const projects = [
   {
@@ -51,18 +52,21 @@ export default function Work() {
           className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14"
         >
           <div>
-            <p className="section-label mb-4">Case Studies</p>
+            <p className="section-label mb-4">Projects &amp; Demos</p>
             <h2 className="section-title text-[clamp(2rem,5vw,3.5rem)]">
               Work That <span className="text-gradient-teal">Delivers</span>
             </h2>
           </div>
           <p className="text-white/40 text-sm max-w-sm leading-relaxed">
-            Real projects. Real results. Every case study below came with measurable business impact.
+            Real projects. Real results. Every project below came with measurable business impact.
           </p>
         </motion.div>
 
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Featured live demo */}
+          <DentalDemo />
+
           {projects.map((p, i) => (
             <motion.div
               key={p.title}
@@ -70,7 +74,7 @@ export default function Work() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.7, delay: i * 0.1 }}
-              className="group card-glass overflow-hidden hover:border-white/[0.12] transition-all duration-500 cursor-none"
+              className="group card-glass overflow-hidden hover:border-white/[0.12] transition-colors duration-500"
             >
               {/* Visual block */}
               <div className={`relative h-52 bg-gradient-to-br ${p.gradient} flex items-center justify-center overflow-hidden`}>

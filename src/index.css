@@ -39,7 +39,6 @@
     color: #ffffff;
     font-family: 'Inter', system-ui, sans-serif;
     overflow-x: hidden;
-    cursor: none;
   }
 
   ::selection {
@@ -64,16 +63,18 @@
 
   .btn-primary {
     @apply relative inline-flex items-center gap-2 px-7 py-3.5 bg-accent-teal text-bg-primary font-heading font-semibold text-sm rounded-full
-           transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(0,229,192,0.4)] active:scale-95 cursor-none;
+           transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(0,229,192,0.4)] active:scale-95;
   }
 
   .btn-outline {
     @apply relative inline-flex items-center gap-2 px-7 py-3.5 border border-white/10 text-white font-heading font-semibold text-sm rounded-full
-           transition-all duration-300 hover:border-accent-teal/50 hover:bg-white/[0.03] active:scale-95 cursor-none;
+           transition-all duration-300 hover:border-accent-teal/50 hover:bg-white/[0.03] active:scale-95;
   }
 
+  /* No backdrop-blur: these cards sit on solid dark sections, so the blur added
+     almost nothing visually but was very expensive to repaint during scroll/hover. */
   .card-glass {
-    @apply bg-white/[0.02] border border-white/[0.06] rounded-2xl backdrop-blur-sm;
+    @apply bg-white/[0.03] border border-white/[0.06] rounded-2xl;
   }
 
   .teal-glow {
@@ -117,37 +118,29 @@
   filter: drop-shadow(0 0 40px rgba(0, 229, 192, 0.25));
 }
 
-/* Custom cursor */
-.cursor-dot,
-.cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  transition: opacity 0.3s;
+/* ------------------------------------------------------------------ *
+ * Cursor
+ * Default everywhere: a simple teal arrow pointer (a recoloured default
+ * cursor). The universal selector forces it over links/buttons too,
+ * beating the browser's default hand/arrow.
+ * Hero section: cursor hidden so the teal spotlight (in Hero.jsx) acts
+ * as the cursor instead.
+ * ------------------------------------------------------------------ */
+* {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M5 3 L5 22 L10 17 L13 24 L16 23 L13 16 L20 16 Z' fill='%2300e5c0' stroke='%23052b27' stroke-width='1.2' stroke-linejoin='round'/%3E%3C/svg%3E") 5 3, auto;
 }
 
-.cursor-dot {
-  width: 6px;
-  height: 6px;
-  background: #00e5c0;
+/* keep a text caret inside real text fields */
+input:not([type='button']):not([type='submit']):not([type='checkbox']):not([type='radio']),
+textarea,
+[contenteditable='true'] {
+  cursor: text;
 }
 
-.cursor-ring {
-  width: 36px;
-  height: 36px;
-  border: 1.5px solid rgba(0, 229, 192, 0.6);
-  transition: width 0.2s, height 0.2s, border-color 0.2s;
-}
-
-.cursor-ring.hovered {
-  width: 56px;
-  height: 56px;
-  border-color: rgba(0, 229, 192, 1);
-  background: rgba(0, 229, 192, 0.05);
+/* hero uses the spotlight instead of the arrow */
+#hero,
+#hero * {
+  cursor: none;
 }
 
 /* Service card 3D tilt */
@@ -175,10 +168,21 @@
   to   { opacity: 1; }
 }
 
-/* Skip rendering off-screen sections until they near the viewport */
-#work,
+/* Skip rendering off-screen sections until they near the viewport.
+   #work is intentionally excluded: it's now cheap to paint, and rendering it
+   eagerly avoids a paint hitch + scrollbar jump when it scrolls into view. */
 #process,
 #stats {
   content-visibility: auto;
   contain-intrinsic-size: 0 700px;
 }
+
+/* Dental demo — featured-card preview waveform.
+   Bars are static by default (zero idle cost) and only animate while the
+   card is hovered, so nothing is repainting when you're just scrolling past. */
+@keyframes dmwave {
+  0%, 100% { transform: scaleY(0.4); opacity: 0.6; }
+  50%      { transform: scaleY(1);   opacity: 1; }
+}
+.dm-bar { transform-origin: bottom; }
+.group:hover .dm-bar { animation: dmwave 1.1s ease-in-out infinite; }

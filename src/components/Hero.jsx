@@ -14,32 +14,86 @@ const fadeUp = {
 }
 
 export default function Hero() {
+  const sectionRef = useRef(null)
   const spotlightRef = useRef(null)
+  const dotRef = useRef(null)
 
+  // Spotlight cursor — only active while the pointer is over the hero.
   useEffect(() => {
-    const el = spotlightRef.current
-    if (!el) return
-    const onMove = (e) => {
-      el.style.left = e.clientX + 'px'
-      el.style.top = e.clientY + 'px'
+    const section = sectionRef.current
+    const spot = spotlightRef.current
+    const dot = dotRef.current
+    if (!section || !spot) return
+
+    let raf
+    let tx = window.innerWidth / 2, ty = window.innerHeight / 2
+    let sx = tx, sy = ty
+    let visible = false
+    const lerp = (a, b, t) => a + (b - a) * t
+
+    const setVisible = (v) => {
+      if (visible === v) return
+      visible = v
+      spot.style.opacity = v ? '1' : '0'
+      if (dot) dot.style.opacity = v ? '1' : '0'
     }
-    window.addEventListener('mousemove', onMove)
-    return () => window.removeEventListener('mousemove', onMove)
+
+    const onMove = (e) => {
+      tx = e.clientX; ty = e.clientY
+      if (dot) { dot.style.left = tx + 'px'; dot.style.top = ty + 'px' }
+      setVisible(true)
+    }
+    const onLeave = () => setVisible(false)
+
+    const loop = () => {
+      sx = lerp(sx, tx, 0.18); sy = lerp(sy, ty, 0.18)
+      spot.style.left = sx + 'px'; spot.style.top = sy + 'px'
+      raf = requestAnimationFrame(loop)
+    }
+    loop()
+
+    section.addEventListener('mousemove', onMove)
+    section.addEventListener('mouseleave', onLeave)
+    return () => {
+      cancelAnimationFrame(raf)
+      section.removeEventListener('mousemove', onMove)
+      section.removeEventListener('mouseleave', onLeave)
+    }
   }, [])
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-bg-primary">
+    <section
+      ref={sectionRef}
+      id="hero"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-bg-primary"
+    >
       {/* Grid background */}
       <div className="absolute inset-0 bg-grid opacity-100" />
 
-      {/* Cursor spotlight */}
+      {/* Spotlight cursor — soft teal light that follows the pointer (hero only) */}
       <div
         ref={spotlightRef}
-        className="fixed w-[700px] h-[700px] rounded-full pointer-events-none"
+        aria-hidden="true"
+        className="hidden md:block fixed w-[460px] h-[460px] rounded-full pointer-events-none opacity-0"
         style={{
-          background: 'radial-gradient(circle, rgba(0,229,192,0.06) 0%, transparent 65%)',
+          background: 'radial-gradient(circle, rgba(0,229,192,0.16) 0%, rgba(0,229,192,0.05) 32%, transparent 66%)',
           transform: 'translate(-50%,-50%)',
-          zIndex: 1,
+          mixBlendMode: 'screen',
+          transition: 'opacity 0.3s ease',
+          zIndex: 5,
+        }}
+      />
+      {/* Precise pointer dot inside the spotlight */}
+      <div
+        ref={dotRef}
+        aria-hidden="true"
+        className="hidden md:block fixed w-[8px] h-[8px] rounded-full pointer-events-none opacity-0"
+        style={{
+          background: '#00e5c0',
+          transform: 'translate(-50%,-50%)',
+          boxShadow: '0 0 10px rgba(0,229,192,0.9)',
+          transition: 'opacity 0.3s ease',
+          zIndex: 40,
         }}
       />
 
