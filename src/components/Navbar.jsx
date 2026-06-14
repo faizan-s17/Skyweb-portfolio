@@ -92,7 +92,7 @@ export default function Navbar() {
                   aria-label={s.label}
                   className="w-8 h-8 rounded-lg border border-white/[0.07] bg-white/[0.02] flex items-center justify-center hover:border-accent-teal/30 hover:bg-accent-teal/5 transition-all duration-300"
                 >
-                  <img src={s.icon} alt={s.label} className="w-[14px] h-[14px]" />
+                  <img src={s.icon} alt={s.label} width="14" height="14" className="w-[14px] h-[14px]" />
                 </a>
               ))}
             </div>

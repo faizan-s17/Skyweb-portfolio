@@ -26,7 +26,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2 mb-5">
-              <img src={logo} alt="SkyWeb Logo" className="h-10 w-auto" />
+              <img src={logo} alt="SkyWeb Logo" width="40" height="40" className="h-10 w-auto" />
               <span className="font-heading font-bold text-lg text-white">SkyWeb</span>
             </div>
             <p className="text-white/35 text-sm leading-relaxed mb-6 max-w-xs">
@@ -46,7 +46,7 @@ export default function Footer() {
                   {s.isLucide ? (
                     <s.icon size={15} />
                   ) : (
-                    <img src={s.icon} alt={s.label} className="w-[15px] h-[15px]" />
+                    <img src={s.icon} alt={s.label} width="15" height="15" className="w-[15px] h-[15px]" />
                   )}
                 </a>
               ))}
