@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import DentalDemo from './DentalDemo'
+import BarberDemo from './BarberDemo'
 
 const projects = [
   {
@@ -64,8 +65,9 @@ export default function Work() {
 
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {/* Featured live demo */}
+          {/* Featured live demos */}
           <DentalDemo />
+          <BarberDemo />
 
           {projects.map((p, i) => (
             <motion.div
