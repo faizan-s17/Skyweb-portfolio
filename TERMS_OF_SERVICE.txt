@@ -1,0 +1,350 @@
+================================================================================
+TERMS OF SERVICE
+SkyWeb - UK-based Digital Agency
+================================================================================
+
+Last Updated: June 15, 2026
+
+================================================================================
+1. ACCEPTANCE OF TERMS
+================================================================================
+
+By accessing and using this website and the services offered by SkyWeb, 
+including but not limited to UI/UX design, AI automation, lead generation 
+agents, voice AI agents, SEO optimization, and chatbots, you acknowledge that 
+you have read, understood, and agree to be bound by these Terms of Service.
+
+If you do not agree to these terms, you must not use this website or our 
+services. SkyWeb reserves the right to update these terms at any time without 
+prior notice. Your continued use of our services constitutes your acceptance 
+of any changes.
+
+================================================================================
+2. SERVICES DESCRIPTION
+================================================================================
+
+SkyWeb provides digital services including, but not limited to:
+
+• UI/UX Design and Prototyping
+• AI Automation and Integration
+• Lead Generation and Marketing Agents
+• Appointment Booking and Voice AI Agents
+• SEO Optimization and Technical SEO
+• Chatbot Development and Deployment
+• Consulting and Strategy Services
+
+These services are provided on an as-is basis. The specific scope, 
+deliverables, timeline, and terms of each project are outlined in individual 
+service agreements or proposals.
+
+================================================================================
+3. USER RESPONSIBILITIES
+================================================================================
+
+By using our services, you agree to:
+
+• Provide accurate, current, and complete information in all interactions
+• Maintain the confidentiality of any account credentials or access 
+  information
+• Use our services only for lawful purposes and in compliance with all 
+  applicable laws
+• Not violate the rights of third parties or use our services to engage in 
+  harmful activities
+• Not attempt to gain unauthorized access to our systems or data
+• Not reverse engineer, decompile, or attempt to derive the source code of 
+  our services
+• Not use our services for sending unsolicited communications or spam
+• Comply with any other terms outlined in your service agreement or proposal
+
+================================================================================
+4. INTELLECTUAL PROPERTY RIGHTS
+================================================================================
+
+4.1 SKYEB PROPERTY
+
+All content, design, code, logos, trademarks, and other intellectual property 
+on the SkyWeb website and related to our marketing materials are owned by 
+SkyWeb or our licensors. You may not reproduce, distribute, or use any of 
+this material without our explicit written permission.
+
+4.2 CLIENT WORK
+
+The intellectual property rights for custom work created for you (such as 
+designs, code, strategies) depend on the specific terms outlined in your 
+service agreement. Unless otherwise specified:
+
+• SkyWeb retains ownership of methodologies, tools, and pre-existing materials 
+  we use in your project
+• You receive ownership or a license to the custom deliverables created 
+  specifically for your project
+• We may use anonymized or non-confidential aspects of the work for portfolio, 
+  case studies, and marketing purposes
+
+4.3 YOUR CONTENT
+
+You retain ownership of any content you provide to us. By providing content, 
+you grant SkyWeb a non-exclusive, worldwide, royalty-free license to use, 
+modify, and reproduce it for the purpose of delivering our services.
+
+================================================================================
+5. PAYMENT AND FEES
+================================================================================
+
+5.1 PRICING
+
+All fees are outlined in your service agreement, proposal, or invoice. Prices 
+are in GBP (British Pounds) unless otherwise specified.
+
+5.2 PAYMENT TERMS
+
+Payment is due according to the terms specified in your agreement (typically 
+50% upfront, 50% upon completion, or as negotiated). Failure to pay may result 
+in suspension or termination of services.
+
+5.3 INVOICING
+
+Invoices are sent via email. You are responsible for providing accurate billing 
+information and promptly notifying us of any errors.
+
+5.4 REFUNDS
+
+Refund eligibility depends on the specific circumstances and is outlined in 
+your service agreement. Generally, refunds may be issued for services not 
+rendered or due to our failure to meet agreed-upon deliverables, subject to 
+any applicable fees already incurred.
+
+5.5 LATE PAYMENTS
+
+Late payments may incur interest charges at a rate of 8% per annum plus the 
+Bank of England base rate, or the maximum rate allowed by law, whichever is 
+lower. We reserve the right to suspend services for overdue accounts.
+
+================================================================================
+6. LIMITATION OF LIABILITY
+================================================================================
+
+To the fullest extent permitted by law, SkyWeb shall not be liable for any 
+indirect, incidental, special, consequential, or punitive damages, including 
+loss of profits, data, or goodwill, arising from or related to your use of 
+our services, even if we have been advised of the possibility of such damages.
+
+Our total liability for any claim arising from our services shall not exceed 
+the amount you paid for the specific service in question during the 12 months 
+preceding the claim.
+
+Some jurisdictions do not allow the exclusion of consequential damages, so 
+this limitation may not apply to you.
+
+================================================================================
+7. DISCLAIMERS
+================================================================================
+
+Our services and website are provided on an "as-is" and "as-available" basis 
+without warranties of any kind. We disclaim all warranties, express or 
+implied, including but not limited to:
+
+• Merchantability or fitness for a particular purpose
+• Non-infringement of intellectual property rights
+• Uninterrupted or error-free operation
+• Compatibility with your systems or third-party services
+• Specific results or performance metrics
+
+While we strive for accuracy, we do not warrant that all information on our 
+website is accurate, complete, or free of errors. You use our services at 
+your own risk.
+
+================================================================================
+8. THIRD-PARTY SERVICES AND INTEGRATIONS
+================================================================================
+
+Our services may integrate with or depend on third-party platforms, tools, 
+and APIs (such as n8n, Make, Zapier, Retell AI, GPT-4, WhatsApp, and others). 
+We are not responsible for:
+
+• Downtime or service interruptions from third-party providers
+• Changes in third-party terms, pricing, or functionality
+• Data loss or security breaches at third-party services
+• Compatibility issues or integration failures
+
+You are responsible for maintaining accounts and agreements with third-party 
+services and complying with their terms.
+
+================================================================================
+9. CONFIDENTIALITY
+================================================================================
+
+Both parties agree to keep confidential any sensitive business information 
+shared during the engagement. However, this does not include:
+
+• Information that is publicly available or becomes publicly available through 
+  no breach of this agreement
+• Information required to be disclosed by law or court order
+• Information disclosed to our service providers or partners under similar 
+  confidentiality obligations
+• General methodologies and techniques we use across projects
+
+We may use anonymized information about your project for case studies, 
+portfolio purposes, and marketing, unless you explicitly opt out.
+
+================================================================================
+10. INDEMNIFICATION
+================================================================================
+
+You agree to indemnify, defend, and hold harmless SkyWeb and its officers, 
+employees, and agents from any claims, damages, losses, or expenses (including 
+legal fees) arising from:
+
+• Your violation of these Terms of Service
+• Your misuse of our services
+• Infringement of intellectual property rights by your content or use
+• Your breach of applicable laws
+• Disputes with third parties regarding your use of our services
+
+================================================================================
+11. TERMINATION
+================================================================================
+
+11.1 TERMINATION BY YOU
+
+You may terminate our engagement by providing written notice as specified in 
+your service agreement. Any applicable fees already paid are non-refundable 
+unless otherwise agreed.
+
+11.2 TERMINATION BY SKYEB
+
+We reserve the right to suspend or terminate services if:
+
+• You breach these terms or your service agreement
+• Payment is not received within the agreed timeframe
+• You engage in illegal or harmful activities
+• We determine that providing services would expose us to legal or 
+  reputational risk
+
+11.3 EFFECT OF TERMINATION
+
+Upon termination, all rights and obligations end, except for those that by 
+their nature are intended to survive (such as payment obligations, 
+confidentiality, and indemnification).
+
+================================================================================
+12. DISPUTE RESOLUTION
+================================================================================
+
+12.1 GOVERNING LAW
+
+These Terms of Service are governed by the laws of England and Wales, without 
+regard to conflicts of law principles.
+
+12.2 ARBITRATION
+
+Any dispute arising from these terms or our services shall first be resolved 
+through good-faith negotiation. If unresolved within 30 days, disputes may be 
+referred to arbitration under the rules of LCIA (London Court of International 
+Arbitration).
+
+12.3 JURISDICTION
+
+Both parties consent to the exclusive jurisdiction of the courts of England 
+and Wales for any legal proceedings not resolved through arbitration.
+
+12.4 WAIVER OF CLASS ACTION
+
+You waive the right to participate in class actions or class arbitrations 
+against SkyWeb.
+
+================================================================================
+13. MODIFICATIONS TO SERVICES
+================================================================================
+
+SkyWeb reserves the right to modify, suspend, or discontinue services or 
+features at any time, with or without notice. We will make reasonable efforts 
+to provide notice of material changes that affect active projects.
+
+Changes to website content, design, or functionality do not entitle clients 
+to refunds or compensation unless such changes directly prevent service 
+delivery.
+
+================================================================================
+14. LIMITATION OF SCOPE OF WORK
+================================================================================
+
+The scope of our services is strictly limited to what is outlined in your 
+service agreement or proposal. Any work outside this scope requires a separate 
+written agreement and additional fees. Requests for changes or additions will 
+be evaluated on a case-by-case basis.
+
+================================================================================
+15. ACCESSIBILITY
+================================================================================
+
+We are committed to making our website and services accessible to all users. 
+If you encounter accessibility issues, please contact us at 
+theskyweb.uk@gmail.com.
+
+================================================================================
+16. PROHIBITION ON SCRAPING AND AUTOMATED ACCESS
+================================================================================
+
+You agree not to:
+
+• Use automated tools to scrape, crawl, or extract data from our website
+• Access our website through bots or scripts unless explicitly authorized
+• Interfere with the normal operation of our website or services
+• Circumvent any authentication or access controls
+
+================================================================================
+17. PERFORMANCE AND RESULTS
+================================================================================
+
+While SkyWeb employs industry best practices and expertise, we do not guarantee 
+specific results such as:
+
+• Search engine rankings or traffic improvements from SEO work
+• Conversion rates or sales from design or optimization work
+• Leads generated from lead generation agents
+• Appointment bookings from scheduling agents
+• Specific ROI or business outcomes
+
+Results depend on many factors outside our control, including market 
+conditions, competition, user behavior, and third-party platforms.
+
+================================================================================
+18. ENTIRE AGREEMENT
+================================================================================
+
+These Terms of Service, together with your service agreement, proposal, and 
+any amendments, constitute the entire agreement between you and SkyWeb 
+regarding our services. Any prior agreements, negotiations, or understandings 
+are superseded by this agreement.
+
+================================================================================
+19. SEVERABILITY
+================================================================================
+
+If any provision of these Terms of Service is found to be invalid or 
+unenforceable, that provision shall be removed or modified to the minimum 
+extent necessary, and the remaining provisions shall continue in full force 
+and effect.
+
+================================================================================
+20. CONTACT INFORMATION
+================================================================================
+
+For questions about these Terms of Service or to report violations, please 
+contact us:
+
+SkyWeb
+Email: theskyweb.uk@gmail.com
+WhatsApp: +44 7950 328625
+Website: www.skyweb.uk
+GitHub: github.com/skyweb
+Location: United Kingdom
+
+================================================================================
+
+These Terms of Service are effective as of the date listed above and apply to 
+all services provided by SkyWeb. We reserve the right to update these terms at 
+any time. Continued use of our services constitutes acceptance of any 
+modifications.
+
+================================================================================

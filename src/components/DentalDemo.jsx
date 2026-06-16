@@ -537,7 +537,7 @@ export default function DentalDemo() {
             </div>
 
             <h3 className="font-heading font-bold text-white text-xl sm:text-2xl mb-2 group-hover:text-accent-teal transition-colors duration-300">
-              AI Dental Receptionist
+              FrontDesk for Dental
             </h3>
             <p className="text-white/45 text-sm leading-relaxed mb-5">
               A voice AI that answers the phone, qualifies the patient, books the appointment, captures insurance and sends confirmation — listen to a real call handled end-to-end.

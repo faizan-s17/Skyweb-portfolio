@@ -135,7 +135,7 @@ export default function Hero() {
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent-teal/20 bg-accent-teal/5 mb-8 backdrop-blur-md"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-accent-teal animate-pulse" />
-          <span className="section-label text-[11px]">Digital Agency · Est. 2024</span>
+          <span className="section-label text-[11px]">Digital Agency · Est. 2026</span>
         </motion.div>
 
         {/* Headline — no blur so LCP is measured at first paint, not animation end */}

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import DentalDemo from './DentalDemo'
 import BarberDemo from './BarberDemo'
+import RooferDemo from './RooferDemo'
 
 const projects = [
   {
@@ -38,19 +39,66 @@ const projects = [
   },
 ]
 
+/* Standout, accent-branded heading for each demo category */
+function CategoryHeader({ index, eyebrow, title, accentWord, tagline, description, accent }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ duration: 0.6 }}
+      className="relative flex items-end justify-between gap-4 border-b border-white/[0.07] pb-6"
+    >
+      <div className="flex items-stretch gap-4">
+        {/* accent bar */}
+        <span
+          className="w-[3px] rounded-full shrink-0"
+          style={{ background: `linear-gradient(to bottom, ${accent}, ${accent}00)` }}
+        />
+        <div>
+          <span
+            className="inline-block font-mono text-[11px] tracking-[0.25em] uppercase px-2.5 py-1 rounded-md mb-3"
+            style={{ background: `${accent}14`, color: accent, border: `1px solid ${accent}33` }}
+          >
+            {eyebrow}
+          </span>
+          <h3 className="font-heading font-bold text-white text-[1.6rem] sm:text-[2.1rem] leading-[1.1] tracking-tight">
+            {title}{' '}
+            {accentWord && <span style={{ color: accent }}>{accentWord}</span>}
+          </h3>
+          {tagline && (
+            <p className="text-white/75 text-sm font-medium mt-1.5">{tagline}</p>
+          )}
+          {description && (
+            <p className="text-white/45 text-sm mt-2 max-w-lg leading-relaxed">{description}</p>
+          )}
+        </div>
+      </div>
+
+      {/* oversized faint index, editorial style */}
+      <span
+        className="hidden sm:block font-heading font-bold text-6xl leading-none select-none shrink-0"
+        style={{ color: `${accent}1f` }}
+      >
+        {index}
+      </span>
+    </motion.div>
+  )
+}
+
 export default function Work() {
   return (
     <section id="work" className="py-28 bg-bg-primary relative overflow-hidden">
       <div className="absolute inset-0 bg-grid opacity-40" />
 
       <div className="relative max-w-7xl mx-auto px-6">
-        {/* Header */}
+        {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14"
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16"
         >
           <div>
             <p className="section-label mb-4">Projects &amp; Demos</p>
@@ -59,16 +107,49 @@ export default function Work() {
             </h2>
           </div>
           <p className="text-white/40 text-sm max-w-sm leading-relaxed">
-            Real projects. Real results. Every project below came with measurable business impact.
+            Interactive, live demos you can try right here — plus selected automation, design and growth work.
           </p>
         </motion.div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {/* Featured live demos */}
+        {/* ───── Category 01 · AI Receptionist ───── */}
+        <CategoryHeader
+          index="01"
+          eyebrow="Live Voice Demos"
+          title="SkyWeb"
+          accentWord="FrontDesk"
+          tagline="AI Voice Receptionist"
+          accent="#00e5c0"
+          description="One voice AI that answers every call, qualifies the caller and books the appointment — shown here for dental and barbershops. Listen to real calls handled end-to-end."
+        />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8 mb-24">
           <DentalDemo />
           <BarberDemo />
+        </div>
 
+        {/* ───── Category 02 · AI Roofing Receptionist + CRM ───── */}
+        <CategoryHeader
+          index="02"
+          eyebrow="Flagship Build"
+          title="SkyWeb"
+          accentWord="RoofDesk"
+          tagline="AI Receptionist + CRM"
+          accent="#4f9cf9"
+          description="A WhatsApp AI captures and qualifies the lead, and a full CRM runs the job — watch a storm leak become a booked job, live."
+        />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8 mb-24">
+          <RooferDemo />
+        </div>
+
+        {/* ───── Category 03 · Selected Work ───── */}
+        <CategoryHeader
+          index="03"
+          eyebrow="Selected Work"
+          title="More"
+          accentWord="Projects"
+          accent="#a855f7"
+          description="A selection of automation, design and growth work — each shipped with measurable business impact."
+        />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
           {projects.map((p, i) => (
             <motion.div
               key={p.title}
@@ -136,7 +217,7 @@ export default function Work() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-center mt-14"
+          className="text-center mt-16"
         >
           <a
             href="https://www.upwork.com/freelancers/~01c2a6207a8fe52c62"

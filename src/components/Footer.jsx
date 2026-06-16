@@ -18,7 +18,7 @@ const socials = [
   { icon: upworkIcon, href: 'https://www.upwork.com/freelancers/~01c2a6207a8fe52c62', label: 'Upwork', isLucide: false },
 ]
 
-export default function Footer() {
+export default function Footer({ onNavigate }) {
   return (
     <footer className="bg-bg-primary border-t border-white/[0.05] pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-6">
@@ -74,7 +74,7 @@ export default function Footer() {
                       }
                       target={['WhatsApp', 'GitHub', 'Instagram'].includes(item) ? '_blank' : undefined}
                       rel="noreferrer"
-                      className="text-white/35 hover:text-white text-sm transition-colors duration-300 truncate block"
+                      className="text-white/35 hover:text-accent-teal text-sm transition-colors duration-300 truncate block"
                     >
                       {item === 'theskyweb.uk@gmail.com' ? 'theskyweb.uk@gmail.com' : item}
                     </a>
@@ -88,14 +88,21 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/[0.05] pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-white/20 text-xs font-mono">
-            © 2024 SkyWeb. All rights reserved.
+            © 2026 SkyWeb. All rights reserved.
           </p>
           <div className="flex gap-6">
-            {['Privacy Policy', 'Terms of Service'].map((item) => (
-              <a key={item} href="#" className="text-white/20 hover:text-white/50 text-xs font-mono transition-colors duration-300">
-                {item}
-              </a>
-            ))}
+            <button
+              onClick={() => onNavigate?.('privacy')}
+              className="text-white/20 hover:text-white/50 text-xs font-mono transition-colors duration-300 bg-none border-none cursor-pointer"
+            >
+              Privacy Policy
+            </button>
+            <button
+              onClick={() => onNavigate?.('terms')}
+              className="text-white/20 hover:text-white/50 text-xs font-mono transition-colors duration-300 bg-none border-none cursor-pointer"
+            >
+              Terms of Service
+            </button>
           </div>
         </div>
       </div>

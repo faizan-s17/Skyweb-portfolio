@@ -186,12 +186,12 @@ export default function DynamicTypography({ text = 'SKYWEB' }) {
   }, [text])
 
   return (
-    <section className="relative py-20 md:py-28 bg-bg-primary overflow-hidden">
+    <section className="relative py-12 md:py-16 bg-bg-primary overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="threejs-glow">
           <canvas
             ref={canvasRef}
-            className="block w-full h-[clamp(150px,26vw,360px)]"
+            className="block w-full h-[clamp(100px,17vw,230px)]"
             role="img"
             aria-label={`${text} animated wordmark`}
           />

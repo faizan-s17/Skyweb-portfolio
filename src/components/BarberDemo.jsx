@@ -531,7 +531,7 @@ export default function BarberDemo() {
               onMouseEnter={(e) => (e.currentTarget.style.color = ACCENT)}
               onMouseLeave={(e) => (e.currentTarget.style.color = '')}
             >
-              AI Barbershop Receptionist
+              FrontDesk for Barbers
             </h3>
             <p className="text-white/45 text-sm leading-relaxed mb-5">
               A voice AI that answers the phone, books the right barber, captures the customer's details and texts a confirmation — listen to a real call handled end-to-end.
