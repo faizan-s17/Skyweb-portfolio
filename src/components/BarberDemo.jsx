@@ -112,7 +112,7 @@ function DemoModal({ onClose }) {
   }, [])
 
   /* draw loop: linear equaliser + subtitle/card sync */
-  const tick = useCallback(() => {
+  const tick = useCallback(function tickFrame() {
     const audio = audioRef.current
     const canvas = canvasRef.current
     if (audio) {
@@ -196,7 +196,7 @@ function DemoModal({ onClose }) {
       c.fillRect(0, cy - 0.75, W, 1.5)
     }
 
-    rafRef.current = requestAnimationFrame(tick)
+    rafRef.current = requestAnimationFrame(tickFrame)
   }, [isPlaying])
 
   useEffect(() => {
@@ -206,9 +206,9 @@ function DemoModal({ onClose }) {
 
   /* cleanup audio context on unmount */
   useEffect(() => {
+    const audio = audioRef.current
     return () => {
       cancelAnimationFrame(rafRef.current)
-      const audio = audioRef.current
       if (audio) { audio.pause() }
       const ctx = ctxRef.current
       if (ctx && ctx.state !== 'closed') ctx.close().catch(() => {})

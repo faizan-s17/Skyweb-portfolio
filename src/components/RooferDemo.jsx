@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Play, Pause, X, RotateCcw, ArrowUpRight, MessageCircle, CheckCheck,
   User, Phone, MapPin, Wrench, AlertTriangle, CalendarClock, CalendarCheck,
-  Inbox, Send, Flame, Home, Users, Calendar, CheckCircle2,
+  Inbox, Flame, Home, Users, Calendar, CheckCircle2, Volume2, VolumeX,
 } from 'lucide-react'
 
 /* ------------------------------------------------------------------ *
@@ -166,11 +166,55 @@ function DemoModal({ onClose }) {
   const lastRef = useRef(0)
   const chatRef = useRef(null)
   const crmRef = useRef(null)
+  const sndMsg = useRef(null)
+  const sndTick = useRef(null)
+  const sndBooked = useRef(null)
+  const sndAmbient = useRef(null)
+  const mutedRef = useRef(true)
+  const prevMsg = useRef(0)
+  const prevCards = useRef(0)
+  const prevBooked = useRef(false)
 
   const [clock, setClock] = useState(0)
   const [playing, setPlaying] = useState(false)
+  const [muted, setMuted] = useState(true)
 
   const setPlay = useCallback((v) => { playingRef.current = v; setPlaying(v) }, [])
+
+  /* preload demo sounds — default muted, the user opts in via the toggle */
+  useEffect(() => {
+    const make = (src, vol, loop = false) => {
+      const a = new Audio(src)
+      a.volume = vol
+      a.loop = loop
+      a.preload = 'auto'
+      return a
+    }
+    sndMsg.current = make('/msg.mp3', 0.35)
+    sndTick.current = make('/tick.mp3', 0.22)
+    sndBooked.current = make('/booked.mp3', 0.5)
+    sndAmbient.current = make('/ambient.mp3', 0.12, true)
+    return () => {
+      [sndMsg, sndTick, sndBooked, sndAmbient].forEach((r) => {
+        if (r.current) { r.current.pause(); r.current = null }
+      })
+    }
+  }, [])
+
+  const playSfx = useCallback((ref) => {
+    const a = ref.current
+    if (!a || mutedRef.current) return
+    try { a.currentTime = 0; a.play().catch(() => {}) } catch { /* noop */ }
+  }, [])
+
+  /* keep the mute ref in sync and drive the ambient bed */
+  useEffect(() => {
+    mutedRef.current = muted
+    const a = sndAmbient.current
+    if (!a) return
+    if (!muted && playing) a.play().catch(() => {})
+    else a.pause()
+  }, [muted, playing])
 
   /* lock body scroll + escape to close */
   useEffect(() => {
@@ -263,6 +307,22 @@ function DemoModal({ onClose }) {
     const el = crmRef.current
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
   }, [cards.length, booked, ended])
+
+  /* sound effects synced to the timeline beats */
+  useEffect(() => {
+    if (messages.length > prevMsg.current && playingRef.current) playSfx(sndMsg)
+    prevMsg.current = messages.length
+  }, [messages.length, playSfx])
+
+  useEffect(() => {
+    if (cards.length > prevCards.current && playingRef.current) playSfx(sndTick)
+    prevCards.current = cards.length
+  }, [cards.length, playSfx])
+
+  useEffect(() => {
+    if (booked && !prevBooked.current && playingRef.current) playSfx(sndBooked)
+    prevBooked.current = booked
+  }, [booked, playSfx])
 
   const togglePlay = () => {
     if (ended) { clockRef.current = 0; setClock(0); setPlay(true); return }
@@ -442,6 +502,14 @@ function DemoModal({ onClose }) {
                   className="w-8 h-8 rounded-full bg-white/[0.06] border border-white/10 text-white/60 hover:text-white flex items-center justify-center transition-colors"
                 >
                   <RotateCcw size={14} />
+                </button>
+                <button
+                  onClick={() => setMuted((v) => !v)}
+                  aria-label={muted ? 'Turn sound on' : 'Turn sound off'}
+                  aria-pressed={!muted}
+                  className="w-8 h-8 rounded-full bg-white/[0.06] border border-white/10 text-white/60 hover:text-white flex items-center justify-center transition-colors"
+                >
+                  {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
                 </button>
                 <span className="ml-auto font-mono text-[11px] text-white/40 tabular-nums">
                   {fmt(clock)} / {fmt(TOTAL)}

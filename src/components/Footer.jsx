@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import logo from '../assets/skyweb-logo-network.png'
 import githubIcon from '../assets/github-icon.svg'
 import whatsappIcon from '../assets/whatsapp-icon.svg'
