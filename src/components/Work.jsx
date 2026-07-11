@@ -198,14 +198,7 @@ export default function Work() {
                 <h3 className="font-heading font-bold text-white text-lg mb-2 group-hover:text-accent-teal transition-colors duration-300">
                   {p.title}
                 </h3>
-                <p className="text-white/40 text-sm leading-relaxed mb-5">{p.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {p.tags.map((t) => (
-                    <span key={t} className="text-xs px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] text-white/30 font-mono">
-                      {t}
-                    </span>
-                  ))}
-                </div>
+                <p className="text-white/40 text-sm leading-relaxed">{p.description}</p>
               </div>
             </motion.div>
           ))}

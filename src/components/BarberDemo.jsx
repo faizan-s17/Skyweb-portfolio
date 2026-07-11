@@ -537,14 +537,6 @@ export default function BarberDemo() {
               A voice AI that answers the phone, books the right barber, captures the customer's details and texts a confirmation — listen to a real call handled end-to-end.
             </p>
 
-            <div className="flex flex-wrap gap-2 mb-6">
-              {['ElevenLabs', 'Twilio', 'n8n', 'SMS'].map((t) => (
-                <span key={t} className="text-xs px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] text-white/35 font-mono">
-                  {t}
-                </span>
-              ))}
-            </div>
-
             <button
               onClick={() => setOpen(true)}
               className="self-start relative inline-flex items-center gap-2 px-7 py-3.5 font-heading font-semibold text-sm rounded-full transition-all duration-300 hover:scale-105 active:scale-95 text-bg-primary"

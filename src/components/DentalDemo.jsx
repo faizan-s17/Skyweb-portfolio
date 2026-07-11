@@ -543,14 +543,6 @@ export default function DentalDemo() {
               A voice AI that answers the phone, qualifies the patient, books the appointment, captures insurance and sends confirmation — listen to a real call handled end-to-end.
             </p>
 
-            <div className="flex flex-wrap gap-2 mb-6">
-              {['ElevenLabs', 'Twilio', 'n8n', 'Calendar'].map((t) => (
-                <span key={t} className="text-xs px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] text-white/35 font-mono">
-                  {t}
-                </span>
-              ))}
-            </div>
-
             <button onClick={() => setOpen(true)} className="btn-primary self-start">
               <Play size={15} /> View Demo
             </button>

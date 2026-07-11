@@ -193,7 +193,7 @@ function DemoModal({ onClose }) {
     sndMsg.current = make('/msg.mp3', 0.35)
     sndTick.current = make('/tick.mp3', 0.22)
     sndBooked.current = make('/booked.mp3', 0.5)
-    sndAmbient.current = make('/ambient.mp3', 0.12, true)
+    sndAmbient.current = make('/ambient.mp3', 0.05, true)
     return () => {
       [sndMsg, sndTick, sndBooked, sndAmbient].forEach((r) => {
         if (r.current) { r.current.pause(); r.current = null }
@@ -723,14 +723,6 @@ export default function RooferDemo() {
               A WhatsApp AI that answers every enquiry, qualifies the homeowner, scores the lead and books the
               inspection — and it all lands in the roofer's CRM in real time. Watch a storm leak become a booked job.
             </p>
-
-            <div className="flex flex-wrap gap-2 mb-6">
-              {['WhatsApp', 'Gemini AI', 'n8n', 'Supabase CRM'].map((t) => (
-                <span key={t} className="text-xs px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] text-white/35 font-mono">
-                  {t}
-                </span>
-              ))}
-            </div>
 
             <button
               onClick={() => setOpen(true)}
