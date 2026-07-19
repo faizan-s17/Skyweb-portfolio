@@ -25,6 +25,36 @@
   size-adjust: 107.64%;
 }
 
+/* ------------------------------------------------------------------ *
+ * Theme tokens. Channels are space-separated RGB so Tailwind's
+ * `rgb(var(--x) / <alpha-value>)` can apply opacity to them.
+ * Dark is the default; `html.light` swaps the palette. `--fg` is the
+ * foreground ink that Tailwind's `white` is mapped onto.
+ * ------------------------------------------------------------------ */
+:root {
+  --bg-primary: 5 5 8;
+  --bg-secondary: 10 10 15;
+  --bg-card: 14 14 20;
+  --fg: 255 255 255;
+  --accent-teal: 0 229 192;
+  --grid-line: 255 255 255;
+  --grid-alpha: 0.03;
+  color-scheme: dark;
+}
+
+:root.light {
+  --bg-primary: 244 247 251;
+  --bg-secondary: 255 255 255;
+  --bg-card: 237 242 248;
+  --fg: 11 18 32;
+  /* the vivid brand teal is unreadable on light, so text//borders use a deeper
+     teal — bg-accent-teal buttons keep enough contrast against --bg-primary ink */
+  --accent-teal: 0 128 108;
+  --grid-line: 11 18 32;
+  --grid-alpha: 0.05;
+  color-scheme: light;
+}
+
 @layer base {
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -35,21 +65,22 @@
   }
 
   body {
-    background-color: #050508;
-    color: #ffffff;
+    background-color: rgb(var(--bg-primary));
+    color: rgb(var(--fg));
     font-family: 'Inter', system-ui, sans-serif;
     overflow-x: hidden;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
   ::selection {
-    background: rgba(0, 229, 192, 0.2);
-    color: #00e5c0;
+    background: rgb(var(--accent-teal) / 0.2);
+    color: rgb(var(--accent-teal));
   }
 
   ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: #050508; }
-  ::-webkit-scrollbar-thumb { background: rgba(0,229,192,0.3); border-radius: 2px; }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(0,229,192,0.6); }
+  ::-webkit-scrollbar-track { background: rgb(var(--bg-primary)); }
+  ::-webkit-scrollbar-thumb { background: rgb(var(--accent-teal) / 0.3); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--accent-teal) / 0.6); }
 }
 
 @layer components {
@@ -98,8 +129,8 @@
   }
 
   .bg-grid {
-    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-image: linear-gradient(rgb(var(--grid-line) / var(--grid-alpha)) 1px, transparent 1px),
+                      linear-gradient(90deg, rgb(var(--grid-line) / var(--grid-alpha)) 1px, transparent 1px);
     background-size: 60px 60px;
   }
 
@@ -113,9 +144,29 @@
   }
 }
 
+/* ------------------------------------------------------------------ *
+ * Light-mode refinements.
+ * The alpha-on-ink cards read as "darker than the page" once --fg flips,
+ * which inverts the expected elevation — on light, cards go white with a
+ * soft shadow instead, and the teal bloom is toned down.
+ * ------------------------------------------------------------------ */
+:root.light .card-glass {
+  background-color: #ffffff;
+  border-color: rgb(var(--fg) / 0.09);
+  box-shadow: 0 1px 3px rgb(var(--fg) / 0.05), 0 8px 24px rgb(var(--fg) / 0.04);
+}
+
+:root.light .teal-glow {
+  box-shadow: 0 10px 40px rgb(var(--fg) / 0.06);
+}
+
 /* Three.js canvas glow wrapper */
 .threejs-glow {
   filter: drop-shadow(0 0 40px rgba(0, 229, 192, 0.25));
+}
+
+:root.light .threejs-glow {
+  filter: drop-shadow(0 0 30px rgba(0, 128, 108, 0.18));
 }
 
 /* ------------------------------------------------------------------ *
@@ -168,14 +219,15 @@ textarea,
   to   { opacity: 1; }
 }
 
-/* Skip rendering off-screen sections until they near the viewport.
-   #work is intentionally excluded: it's now cheap to paint, and rendering it
-   eagerly avoids a paint hitch + scrollbar jump when it scrolls into view. */
-#process,
-#stats {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 700px;
-}
+/* content-visibility: auto was removed from #process and #stats (2026-07-19).
+   Their placeholder height (700px) drifted from the real rendered height
+   (~869px and ~513px), so the browser's layout shifted as each section was
+   "revealed" on scroll. That shift raced with framer-motion's IntersectionObserver-
+   based whileInView triggers on every section below them (Testimonials, CTA),
+   permanently stranding their cards at opacity: 0 since `once: true` never
+   re-fires. Rendering these sections eagerly avoids the paint hitch, the
+   scrollbar jump, and the broken animations — same call already made for
+   #work below. */
 
 /* Dental demo — featured-card preview waveform.
    Bars are static by default (zero idle cost) and only animate while the

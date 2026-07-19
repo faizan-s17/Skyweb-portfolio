@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Sun, Moon } from 'lucide-react'
 import logo from '../assets/skyweb-logo-network.png'
 import githubIcon from '../assets/github-icon.svg'
 import whatsappIcon from '../assets/whatsapp-icon.svg'
@@ -21,15 +21,50 @@ const socials = [
   { icon: upworkIcon, href: 'https://www.upwork.com/freelancers/~01c2a6207a8fe52c62', label: 'Upwork' },
 ]
 
+/* The initial class is set by the inline script in index.html (pre-paint), so
+ * this just mirrors whatever is already on <html>. */
+const readTheme = () =>
+  typeof document !== 'undefined' && document.documentElement.classList.contains('light')
+    ? 'light'
+    : 'dark'
+
+function ThemeToggle({ theme, onToggle, className = '' }) {
+  const next = theme === 'light' ? 'dark' : 'light'
+  return (
+    <button
+      onClick={onToggle}
+      aria-label={`Switch to ${next} mode`}
+      title={`Switch to ${next} mode`}
+      className={`w-8 h-8 rounded-lg border border-white/[0.07] bg-white/[0.02] flex items-center justify-center text-white/60 hover:text-accent-teal hover:border-accent-teal/30 hover:bg-accent-teal/5 transition-all duration-300 ${className}`}
+    >
+      {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
+    </button>
+  )
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const [theme, setTheme] = useState(readTheme)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  /* Keep the updater pure — React may call it more than once, so the DOM and
+   * storage writes belong in an effect or they drift out of sync with state. */
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))
+  }, [])
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('light', theme === 'light')
+    try { localStorage.setItem('skyweb-theme', theme) } catch { /* private mode */ }
+    const meta = document.querySelector('meta[name="theme-color"]')
+    if (meta) meta.setAttribute('content', theme === 'light' ? '#f4f7fb' : '#050508')
+  }, [theme])
 
   const handleNav = (href) => {
     setOpen(false)
@@ -81,8 +116,9 @@ export default function Navbar() {
             <a href="mailto:theskyweb.uk@gmail.com" className="btn-primary text-xs px-5 py-2.5">
               Get a Free Quote
             </a>
-            {/* Social Icons */}
+            {/* Social Icons + theme toggle */}
             <div className="flex items-center gap-2">
+              <ThemeToggle theme={theme} onToggle={toggleTheme} />
               {socials.map((s) => (
                 <a
                   key={s.label}
@@ -98,14 +134,17 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Hamburger */}
-          <button
-            className="lg:hidden text-white/70 hover:text-white transition-colors"
-            onClick={() => setOpen(!open)}
-            aria-label="Toggle menu"
-          >
-            {open ? <X size={22} /> : <Menu size={22} />}
-          </button>
+          {/* Theme toggle + hamburger (mobile) */}
+          <div className="flex items-center gap-3 lg:hidden">
+            <ThemeToggle theme={theme} onToggle={toggleTheme} />
+            <button
+              className="text-white/70 hover:text-white transition-colors"
+              onClick={() => setOpen(!open)}
+              aria-label="Toggle menu"
+            >
+              {open ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
         </div>
       </motion.nav>
 

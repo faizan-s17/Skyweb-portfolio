@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Layers, Zap, Users, Search, MessageSquare, Mic } from 'lucide-react'
 import { useRef } from 'react'
+import { accentColor, useIsLight } from '../lib/theme'
 
 const services = [
   {
@@ -8,54 +9,50 @@ const services = [
     color: '#00e5c0',
     title: 'UI/UX Design',
     description:
-      'Pixel-perfect, conversion-focused interfaces built with Figma — from wireframes to high-fidelity prototypes that clients approve first try.',
-    tags: ['Figma', 'Prototyping', 'Design Systems'],
+      'Pixel-perfect, conversion-focused interfaces built in Figma, from wireframes to high-fidelity prototypes that clients approve on the first try.',
   },
   {
     icon: Zap,
     color: '#ff5722',
     title: 'AI Automation',
     description:
-      'Eliminate repetitive tasks and unlock efficiency. We wire up smart automation pipelines that run 24/7 — zero burnout, maximum output.',
-    tags: ['n8n', 'Make', 'Zapier', 'APIs'],
+      'We eliminate repetitive tasks by wiring up automation pipelines that run around the clock, so your team can focus on higher-value work.',
   },
   {
     icon: Users,
     color: '#f5a623',
     title: 'Lead & Marketing Agents',
     description:
-      'Intelligent AI agents that qualify leads, send follow-ups, and run your outreach campaigns on autopilot — while you sleep.',
-    tags: ['Lead Gen', 'Cold Outreach', 'CRM'],
+      'AI agents that qualify leads, send follow-ups, and run your outreach campaigns on autopilot, even while you sleep.',
   },
   {
     icon: Mic,
     color: '#00b4d8',
     title: 'Appointment & Voice Agents',
     description:
-      'Deploy voice AI that books calls, answers FAQs, and handles reception. Your customers never wait, your team never burns out.',
-    tags: ['Voice AI', 'Scheduling', 'Retell AI'],
+      'Deploy voice AI that books calls, answers FAQs, and handles reception, so customers get an instant answer and your team isn\'t stuck on the phone all day.',
   },
   {
     icon: Search,
     color: '#a855f7',
     title: 'SEO Optimization',
     description:
-      'Technical SEO + content strategy that pushes you to page one. We audit, fix, and build — then show you the rankings climb.',
-    tags: ['Technical SEO', 'Content', 'Analytics'],
+      'Technical SEO and content strategy that pushes you toward page one. We audit your site, fix what\'s holding it back, and track the rankings as they climb.',
   },
   {
     icon: MessageSquare,
     color: '#10b981',
     title: 'Chatbots',
     description:
-      'Custom-trained chatbots that handle support, close sales, and engage visitors 24/7 — integrated into your site or WhatsApp.',
-    tags: ['GPT-4', 'WhatsApp', 'Web Chat'],
+      'Custom-trained chatbots that handle support and close sales around the clock, built into your website or WhatsApp.',
   },
 ]
 
 function ServiceCard({ service, index }) {
   const cardRef = useRef(null)
+  const isLight = useIsLight()
   const Icon = service.icon
+  const iconColor = accentColor(service.color, isLight)
 
   const handleMove = (e) => {
     const card = cardRef.current
@@ -88,7 +85,7 @@ function ServiceCard({ service, index }) {
           className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
           style={{ background: `${service.color}15`, border: `1px solid ${service.color}25` }}
         >
-          <Icon size={22} style={{ color: service.color }} />
+          <Icon size={22} style={{ color: iconColor }} />
         </div>
 
         {/* Title */}
@@ -97,21 +94,9 @@ function ServiceCard({ service, index }) {
         </h3>
 
         {/* Description */}
-        <p className="text-white/45 text-sm leading-relaxed mb-5 font-sans">
+        <p className="text-white/45 text-sm leading-relaxed font-sans">
           {service.description}
         </p>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2">
-          {service.tags.map((tag) => (
-            <span
-              key={tag}
-              className="px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] text-white/35 text-xs font-mono"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
 
         {/* Hover glow line */}
         <div
@@ -143,7 +128,7 @@ export default function Services() {
             <span className="text-gradient-teal">Scale</span>
           </h2>
           <p className="text-white/40 max-w-xl mx-auto text-base leading-relaxed">
-            Full-stack digital services built for businesses that want real results — not just a pretty website.
+            Full-stack digital services for businesses that want real results, not just a pretty website.
           </p>
         </motion.div>
 

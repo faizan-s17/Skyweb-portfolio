@@ -5,10 +5,23 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#050508" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f4f7fb" />
+    <!-- Light is the default theme. Apply it (or a saved dark preference)
+         before first paint so the site never flashes the wrong theme. -->
+    <script>
+      (function () {
+        var theme = 'light';
+        try {
+          var saved = localStorage.getItem('skyweb-theme');
+          if (saved === 'dark') theme = 'dark';
+        } catch (e) { /* private mode — fall back to the default (light) */ }
+        if (theme === 'light') document.documentElement.classList.add('light');
+      })();
+    </script>
     <meta name="description" content="SkyWeb – UI/UX, AI Automation, AI Agents, SEO & Chatbots for modern businesses." />
     <meta name="facebook-domain-verification" content="37jkyls1dscm8qg5ozk4nmyw1j6p29" />
+    <link rel="canonical" href="https://www.theskyweb.com/" />
     <title>SkyWeb – Digital Agency</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Quote } from 'lucide-react'
+import { accentColor, useIsLight } from '../lib/theme'
 
 const testimonials = [
   {
@@ -29,6 +30,7 @@ const testimonials = [
 ]
 
 export default function Testimonials() {
+  const isLight = useIsLight()
   return (
     <section className="py-28 bg-bg-primary relative overflow-hidden">
       <div className="absolute inset-0 bg-grid opacity-30" />
@@ -60,13 +62,13 @@ export default function Testimonials() {
               transition={{ duration: 0.7, delay: i * 0.1 }}
               className="card-glass p-7 flex flex-col gap-5 hover:border-white/[0.12] transition-all duration-300 group"
             >
-              <Quote size={20} style={{ color: t.color }} className="opacity-70" />
+              <Quote size={20} style={{ color: accentColor(t.color, isLight) }} className="opacity-70" />
               <p className="text-white/60 text-sm leading-relaxed flex-1 italic">
                 "{t.quote}"
               </p>
               <div className="flex items-center gap-3 pt-3 border-t border-white/[0.05]">
                 <div
-                  className="w-9 h-9 rounded-full flex items-center justify-center font-heading font-bold text-xs text-bg-primary shrink-0"
+                  className="w-9 h-9 rounded-full flex items-center justify-center font-heading font-bold text-xs text-[#0b1220] shrink-0"
                   style={{ background: t.color }}
                 >
                   {t.avatar}

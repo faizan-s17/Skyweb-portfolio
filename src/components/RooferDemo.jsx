@@ -19,15 +19,140 @@ import {
  *          'customer' = homeowner messaging in (incoming, grey bubble)
  * ------------------------------------------------------------------ */
 
-/* storm / sky blue — distinct from the teal dental + gold barber demos,
- * and on-theme for "SkyWeb" + roofing (sky, weather, storms) */
-const ACCENT = '#4f9cf9'
-const ACCENT_2 = '#2f6fd6'
+/* SkyWeb's warm brand accents — keeps RoofDesk clearly distinct from the
+ * blue FrontDesk receptionist it sits next to, and reads as "urgent job /
+ * storm damage" rather than another voice demo */
+const ACCENT = '#ff5722'
+const ACCENT_2 = '#f5a623'
 
-/* WhatsApp dark-theme bubble colours for authenticity */
-const WA_OUT = '#075e54cc' // our side (AI) — green
-const WA_IN = '#202c33'    // customer side — grey
-const WA_BG = '#0b141a'
+/* The player follows the site theme (mirrors DentalDemo's approach). Pinning
+ * these on the modal root re-points every text-white/x, bg-white/x and
+ * border-white/x utility inside it. */
+const DARK_STAGE = {
+  '--fg': '255 255 255',
+  '--bg-primary': '5 5 8',
+  '--bg-secondary': '10 10 15',
+  '--bg-card': '14 14 20',
+  '--accent-teal': '0 229 192',
+  '--grid-line': '255 255 255',
+  '--grid-alpha': '0.03',
+}
+const LIGHT_STAGE = {
+  '--fg': '11 18 32',
+  '--bg-primary': '244 247 251',
+  '--bg-secondary': '255 255 255',
+  '--bg-card': '237 242 248',
+  '--accent-teal': '0 128 108',
+  '--grid-line': '11 18 32',
+  '--grid-alpha': '0.05',
+}
+
+/* WhatsApp-authentic bubble/surface colours for each theme, plus the
+ * CRM panel's SaaS-dashboard palette. Everything literal (hex, or Tailwind
+ * classes that don't route through the --fg token) lives here so the whole
+ * modal reads as one deliberate light or dark surface, not an inverted dark
+ * theme with mismatched panels. */
+function surfaceset(light) {
+  return light
+    ? {
+        backdrop: 'rgba(15,23,42,0.4)',
+        waHeader: '#ffffff',
+        chatBg: '#eaf1fb',
+        waOut: '#d9fdd3',
+        waIn: '#ffffff',
+        inputBar: '#f0f5fc',
+        // soft blue canvas (matches FrontDesk's light stage) with white cards
+        // raised on top of it — flat white-on-white read as sterile/plain.
+        crmBg: '#eef3f9',
+        crmHeaderBg: '#e4ecf5',
+        crmBorder: 'border-[#d8e6f5]',
+        crmTitle: 'text-slate-800',
+        crmLive: 'text-emerald-600',
+        headerIconBg: 'bg-blue-100',
+        headerIconText: 'text-blue-600',
+        cardShadow: '0 1px 2px rgba(30,64,120,0.06), 0 6px 16px rgba(30,64,120,0.07)',
+        kpiBg: 'bg-[#ffffff]',
+        kpiBorder: 'border-[#d8e6f5]',
+        kpiHighlightBorder: 'border-red-300',
+        kpiLabel: 'text-slate-500',
+        kpiValue: 'text-slate-900',
+        leadsCard: 'bg-[#ffffff] border-[#d8e6f5]',
+        leadsLabel: 'text-slate-700',
+        leadsCount: 'text-slate-400',
+        emptyState: 'text-slate-400',
+        leadCardBase: 'bg-[#ffffff]',
+        leadCardBorderHot: 'border-red-200',
+        leadCardBorderNormal: 'border-[#d8e6f5]',
+        avatarHot: 'bg-red-50 text-red-600',
+        avatarNormal: 'bg-slate-100 text-slate-500',
+        name: 'text-slate-800',
+        sub: 'text-slate-500',
+        scoreHot: 'bg-red-50 border-red-200 text-red-600',
+        scoreWarm: 'bg-amber-50 border-amber-200 text-amber-600',
+        scoreOk: 'bg-emerald-50 border-emerald-200 text-emerald-600',
+        scoreNone: 'bg-slate-100 border-slate-200 text-slate-400',
+        statusBooked: 'text-cyan-700 bg-cyan-50 border-cyan-200',
+        statusNew: 'text-blue-700 bg-blue-50 border-blue-200',
+        apptBar: 'bg-cyan-50 border-cyan-200',
+        apptText: 'text-cyan-700',
+        apptConfirmed: 'bg-emerald-100 text-emerald-700',
+        metaText: 'text-slate-500',
+        lastMeta: 'text-slate-300',
+        sourceBadge: 'bg-emerald-50 border-emerald-200 text-emerald-700',
+        urgencyText: 'text-red-600',
+        endedCard: 'border-emerald-200 bg-emerald-50',
+        endedTitle: 'text-slate-800',
+        endedBody: 'text-slate-500',
+      }
+    : {
+        backdrop: 'rgba(0,0,0,0.8)',
+        waHeader: '#1f2c33',
+        chatBg: '#0b141a',
+        waOut: '#075e54cc',
+        waIn: '#202c33',
+        inputBar: '#1f2c33',
+        crmBg: '#0f0f10',
+        crmHeaderBg: '#161618',
+        crmBorder: 'border-zinc-800',
+        crmTitle: 'text-zinc-100',
+        crmLive: 'text-emerald-400',
+        headerIconBg: 'bg-blue-500/15',
+        headerIconText: 'text-blue-400',
+        cardShadow: 'none',
+        kpiBg: 'bg-[#0f0f10]',
+        kpiBorder: 'border-zinc-800/60',
+        kpiHighlightBorder: 'border-red-500/30',
+        kpiLabel: 'text-zinc-500',
+        kpiValue: 'text-zinc-100',
+        leadsCard: 'bg-[#0f0f10] border-zinc-800/60',
+        leadsLabel: 'text-zinc-200',
+        leadsCount: 'text-zinc-600',
+        emptyState: 'text-zinc-600',
+        leadCardBase: 'bg-[#0f0f10]',
+        leadCardBorderHot: 'border-red-500/30',
+        leadCardBorderNormal: 'border-zinc-800/60',
+        avatarHot: 'bg-red-500/15 text-red-300',
+        avatarNormal: 'bg-zinc-800 text-zinc-400',
+        name: 'text-zinc-200',
+        sub: 'text-zinc-500',
+        scoreHot: 'bg-red-500/10 border-red-500/30 text-red-400',
+        scoreWarm: 'bg-amber-500/10 border-amber-500/30 text-amber-400',
+        scoreOk: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
+        scoreNone: 'bg-zinc-800 border-zinc-700 text-zinc-500',
+        statusBooked: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30',
+        statusNew: 'text-blue-400 bg-blue-500/10 border-blue-500/30',
+        apptBar: 'bg-cyan-500/10 border-cyan-500/20',
+        apptText: 'text-cyan-300',
+        apptConfirmed: 'bg-emerald-500/20 text-emerald-400',
+        metaText: 'text-zinc-500',
+        lastMeta: 'text-zinc-700',
+        sourceBadge: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400',
+        urgencyText: 'text-red-400',
+        endedCard: 'border-emerald-500/25 bg-emerald-500/[0.06]',
+        endedTitle: 'text-zinc-100',
+        endedBody: 'text-zinc-400',
+      }
+}
 
 const SCRIPT = [
   {
@@ -132,11 +257,11 @@ const fmt = (ms) => {
 }
 
 /* compact KPI tile — mirrors the real CRM dashboard cards */
-function KpiTile({ label, value, Icon, color, highlight }) {
+function KpiTile({ label, value, Icon, color, highlight, T }) {
   return (
-    <div className={`rounded-xl border bg-[#0f0f10] px-2.5 py-2.5 ${highlight ? 'border-red-500/30' : 'border-zinc-800/60'}`}>
+    <div className={`rounded-xl border ${T.kpiBg} ${highlight ? T.kpiHighlightBorder : T.kpiBorder} px-2.5 py-2.5`} style={{ boxShadow: T.cardShadow }}>
       <div className="flex items-center justify-between mb-1.5">
-        <span className="text-[9px] font-medium text-zinc-500 uppercase tracking-wider truncate">{label}</span>
+        <span className={`text-[9px] font-medium ${T.kpiLabel} uppercase tracking-wider truncate`}>{label}</span>
         <span className="w-5 h-5 rounded-md flex items-center justify-center shrink-0" style={{ background: `${color}1a` }}>
           <Icon size={11} style={{ color }} />
         </span>
@@ -149,7 +274,7 @@ function KpiTile({ label, value, Icon, color, highlight }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.25 }}
-            className="block text-lg font-bold text-zinc-100 tabular-nums leading-none"
+            className={`block text-lg font-bold ${T.kpiValue} tabular-nums leading-none`}
           >
             {value}
           </motion.span>
@@ -178,6 +303,14 @@ function DemoModal({ onClose }) {
   const [clock, setClock] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [muted, setMuted] = useState(true)
+
+  // follow the site theme (read once — the toggle lives behind the modal, so
+  // it can't change while the player is open)
+  const [light] = useState(
+    () => typeof document !== 'undefined' && document.documentElement.classList.contains('light'),
+  )
+  const STAGE = light ? LIGHT_STAGE : DARK_STAGE
+  const T = useMemo(() => surfaceset(light), [light])
 
   const setPlay = useCallback((v) => { playingRef.current = v; setPlaying(v) }, [])
 
@@ -249,18 +382,17 @@ function DemoModal({ onClose }) {
     return () => cancelAnimationFrame(raf)
   }, [])
 
-  /* auto-start shortly after open */
-  useEffect(() => {
-    const t = setTimeout(() => setPlay(true), 600)
-    return () => clearTimeout(t)
-  }, [setPlay])
-
-  /* derive everything from the clock */
-  const messages = useMemo(() => BEATS.filter((b) => clock >= b.msgAt), [clock])
+  /* derive everything from the clock. `started` gates the pre-play intro:
+   * without it, the first beat's typing window (typingStart: 0) would make
+   * typingSpeaker truthy at clock=0 and skip straight past the intro before
+   * the user ever presses play. */
+  const started = playing || clock > 0
+  const messages = useMemo(() => (started ? BEATS.filter((b) => clock >= b.msgAt) : []), [clock, started])
   const typingSpeaker = useMemo(() => {
+    if (!started) return null
     const b = BEATS.find((x) => clock >= x.typingStart && clock < x.msgAt)
     return b ? b.speaker : null
-  }, [clock])
+  }, [clock, started])
   const cards = useMemo(() => {
     const out = []
     for (const b of BEATS) for (const c of b.cards) if (clock >= c.at) out.push(c)
@@ -288,13 +420,11 @@ function DemoModal({ onClose }) {
   const hotLeads = 5 + (isHot ? 1 : 0)
   const bookedCount = 8 + (booked ? 1 : 0)
   const scorePillCls = isHot
-    ? 'bg-red-500/10 border-red-500/30 text-red-400'
-    : score >= 50 ? 'bg-amber-500/10 border-amber-500/30 text-amber-400'
-    : score >= 25 ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-    : 'bg-zinc-800 border-zinc-700 text-zinc-500'
-  const statusCls = booked
-    ? 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30'
-    : 'text-blue-400 bg-blue-500/10 border-blue-500/30'
+    ? T.scoreHot
+    : score >= 50 ? T.scoreWarm
+    : score >= 25 ? T.scoreOk
+    : T.scoreNone
+  const statusCls = booked ? T.statusBooked : T.statusNew
 
   /* keep the chat pinned to the latest message */
   useEffect(() => {
@@ -345,9 +475,10 @@ function DemoModal({ onClose }) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
       className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6"
+      style={STAGE}
       onClick={onClose}
     >
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
+      <div className="absolute inset-0 backdrop-blur-md" style={{ background: T.backdrop }} />
 
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -377,8 +508,8 @@ function DemoModal({ onClose }) {
           <div className="relative border-b lg:border-b-0 lg:border-r border-white/[0.06] overflow-hidden flex flex-col lg:min-h-0">
             {/* WhatsApp header */}
             <div
-              className="relative flex items-center gap-3 px-5 py-3.5 pr-12 lg:pr-5"
-              style={{ background: '#1f2c33' }}
+              className="relative flex items-center gap-3 px-5 py-3.5 pr-12 lg:pr-5 border-b border-white/[0.06]"
+              style={{ background: T.waHeader }}
             >
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center text-white shrink-0"
@@ -399,14 +530,41 @@ function DemoModal({ onClose }) {
             <div
               ref={chatRef}
               className="relative overflow-y-auto px-4 py-5 space-y-2.5 h-[46vh] lg:h-auto lg:flex-1 min-h-0"
-              style={{ background: WA_BG }}
+              style={{ background: T.chatBg }}
             >
               {/* faint WhatsApp-style texture */}
               <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-grid" />
 
-              {messages.length === 0 && !typingSpeaker && (
-                <div className="relative flex items-center justify-center h-full">
-                  <p className="text-white/30 text-sm">Starting conversation…</p>
+              {!started && (
+                <div className="relative flex flex-col items-center justify-center h-full text-center gap-4 px-4">
+                  <span
+                    className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-[0.2em] px-3 py-1.5 rounded-full"
+                    style={{ background: `${ACCENT}1f`, border: `1px solid ${ACCENT}4d`, color: ACCENT }}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: ACCENT }} />
+                    Live walkthrough, not a real transcript
+                  </span>
+                  <p className="text-white/45 text-sm max-w-xs leading-relaxed">
+                    A realistic example of how the AI receptionist handles a storm-damage enquiry, start to finish.
+                  </p>
+                  <div className="flex flex-wrap items-center justify-center gap-2">
+                    {['Answers WhatsApp instantly', 'Scores every lead', 'Books straight into your CRM'].map((f) => (
+                      <span
+                        key={f}
+                        className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-white/60"
+                      >
+                        <CheckCircle2 size={12} style={{ color: ACCENT }} />
+                        {f}
+                      </span>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => setPlay(true)}
+                    className="mt-1 inline-flex items-center gap-2 px-6 py-3 rounded-full font-heading font-semibold text-sm text-[#fff] hover:scale-105 active:scale-95 transition-transform"
+                    style={{ background: ACCENT, boxShadow: `0 0 24px ${ACCENT}66` }}
+                  >
+                    <Play size={15} className="ml-0.5" /> Start Demo
+                  </button>
                 </div>
               )}
 
@@ -425,7 +583,7 @@ function DemoModal({ onClose }) {
                       <div
                         className="max-w-[82%] px-3 py-2 rounded-2xl text-[13.5px] leading-snug text-white shadow-sm"
                         style={{
-                          background: out ? WA_OUT : WA_IN,
+                          background: out ? T.waOut : T.waIn,
                           borderTopRightRadius: out ? 4 : 16,
                           borderTopLeftRadius: out ? 16 : 4,
                         }}
@@ -452,7 +610,7 @@ function DemoModal({ onClose }) {
                   >
                     <div
                       className="px-3.5 py-3 rounded-2xl flex items-center gap-1"
-                      style={{ background: typingSpeaker === 'ai' ? WA_OUT : WA_IN }}
+                      style={{ background: typingSpeaker === 'ai' ? T.waOut : T.waIn }}
                     >
                       {[0, 1, 2].map((d) => (
                         <motion.span
@@ -469,7 +627,7 @@ function DemoModal({ onClose }) {
             </div>
 
             {/* media controls (styled like a WhatsApp input bar) */}
-            <div className="px-4 py-3 border-t border-white/[0.06]" style={{ background: '#1f2c33' }}>
+            <div className="px-4 py-3 border-t border-white/[0.06]" style={{ background: T.inputBar }}>
               <div
                 onClick={seek}
                 role="slider"
@@ -519,14 +677,14 @@ function DemoModal({ onClose }) {
           </div>
 
           {/* ---------- Right: the real SkyWeb CRM, populating live ---------- */}
-          <div className="relative bg-[#0f0f10] flex flex-col overflow-hidden lg:min-h-0">
+          <div className="relative flex flex-col overflow-hidden lg:min-h-0" style={{ background: T.crmBg }}>
             {/* header */}
-            <div className="shrink-0 flex items-center gap-2.5 px-4 lg:pr-14 py-3 border-b border-zinc-800 bg-[#161618]">
-              <span className="w-6 h-6 rounded-md flex items-center justify-center shrink-0 bg-blue-500/15">
-                <Home size={13} className="text-blue-400" />
+            <div className={`shrink-0 flex items-center gap-2.5 px-4 lg:pr-14 py-3 border-b ${T.crmBorder}`} style={{ background: T.crmHeaderBg }}>
+              <span className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${T.headerIconBg}`}>
+                <Home size={13} className={T.headerIconText} />
               </span>
-              <span className="text-[13px] font-semibold text-zinc-100">SkyWeb CRM</span>
-              <span className="ml-auto flex items-center gap-1.5 text-[11px] text-emerald-400 shrink-0">
+              <span className={`text-[13px] font-semibold ${T.crmTitle}`}>SkyWeb CRM</span>
+              <span className={`ml-auto flex items-center gap-1.5 text-[11px] ${T.crmLive} shrink-0`}>
                 <span className={`w-1.5 h-1.5 rounded-full bg-emerald-400 ${playing ? 'animate-pulse' : ''}`} />
                 live
               </span>
@@ -536,44 +694,44 @@ function DemoModal({ onClose }) {
             <div ref={crmRef} className="overflow-y-auto p-4 space-y-3 lg:flex-1 lg:min-h-0">
               {/* KPI strip — mirrors the dashboard */}
               <div className="grid grid-cols-3 gap-2">
-                <KpiTile label="Total Leads" value={totalLeads} Icon={Users} color="#3b82f6" />
-                <KpiTile label="Hot Leads" value={hotLeads} Icon={Flame} color="#f87171" highlight={isHot} />
-                <KpiTile label="Booked" value={bookedCount} Icon={Calendar} color="#22d3ee" />
+                <KpiTile label="Total Leads" value={totalLeads} Icon={Users} color="#3b82f6" T={T} />
+                <KpiTile label="Hot Leads" value={hotLeads} Icon={Flame} color="#f87171" highlight={isHot} T={T} />
+                <KpiTile label="Booked" value={bookedCount} Icon={Calendar} color="#22d3ee" T={T} />
               </div>
 
               {/* Leads table card */}
-              <div className="rounded-xl border border-zinc-800/60 bg-[#0f0f10] overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-2.5 border-b border-zinc-800/60">
+              <div className={`rounded-xl border overflow-hidden ${T.leadsCard}`} style={{ boxShadow: T.cardShadow }}>
+                <div className={`flex items-center justify-between px-4 py-2.5 border-b ${T.crmBorder}`}>
                   <div className="flex items-center gap-2">
-                    <Users size={13} className="text-zinc-500" />
-                    <span className="text-[13px] font-semibold text-zinc-200">Leads</span>
+                    <Users size={13} className={T.metaText} />
+                    <span className={`text-[13px] font-semibold ${T.leadsLabel}`}>Leads</span>
                   </div>
-                  <span className="text-[11px] text-zinc-600">{leadCreated ? '1 new' : '—'}</span>
+                  <span className={`text-[11px] ${T.leadsCount}`}>{leadCreated ? '1 new' : '—'}</span>
                 </div>
 
                 <div className="p-2.5">
                   {!leadCreated ? (
-                    <div className="flex items-center justify-center gap-2 py-9 text-zinc-600 text-[13px]">
+                    <div className={`flex items-center justify-center gap-2 py-9 ${T.emptyState} text-[13px]`}>
                       <Inbox size={15} className="opacity-40" /> Listening for new enquiries…
                     </div>
                   ) : (
                     <motion.div
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className={`rounded-xl border bg-[#0f0f10] p-3 ${isHot ? 'border-red-500/30' : 'border-zinc-800/60'}`}
+                      className={`rounded-xl border p-3 ${T.leadCardBase} ${isHot ? T.leadCardBorderHot : T.leadCardBorderNormal}`}
                     >
                       {/* row 1 — identity + score */}
                       <div className="flex items-start justify-between gap-3 mb-2">
                         <div className="flex items-center gap-2.5 min-w-0">
-                          <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${isHot ? 'bg-red-500/15 text-red-300' : 'bg-zinc-800 text-zinc-400'}`}>
+                          <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${isHot ? T.avatarHot : T.avatarNormal}`}>
                             {nm ? nm.charAt(0) : '?'}
                           </div>
                           <div className="min-w-0">
                             <div className="flex items-center gap-1.5">
-                              <span className="text-[13px] font-semibold text-zinc-200 truncate">{nm || 'New lead…'}</span>
+                              <span className={`text-[13px] font-semibold truncate ${T.name}`}>{nm || 'New lead…'}</span>
                               {isHot && <Flame size={13} className="text-red-400 shrink-0" />}
                             </div>
-                            <p className="text-[11px] text-zinc-500 truncate">{svc || 'Awaiting details'}</p>
+                            <p className={`text-[11px] truncate ${T.sub}`}>{svc || 'Awaiting details'}</p>
                           </div>
                         </div>
                         <span className={`inline-flex items-center gap-1 rounded-md border font-bold tabular-nums text-[11px] px-1.5 py-0.5 shrink-0 ${scorePillCls}`}>
@@ -588,11 +746,11 @@ function DemoModal({ onClose }) {
                           <motion.div
                             initial={{ opacity: 0, height: 0, marginBottom: 0 }}
                             animate={{ opacity: 1, height: 'auto', marginBottom: 8 }}
-                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20 overflow-hidden"
+                            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border overflow-hidden ${T.apptBar}`}
                           >
-                            <Calendar size={13} className="text-cyan-400 shrink-0" />
-                            <span className="text-[11px] text-cyan-300 font-medium truncate">{apptVal}</span>
-                            <span className="ml-auto text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-medium shrink-0">CONFIRMED</span>
+                            <Calendar size={13} className={`shrink-0 ${T.apptText}`} />
+                            <span className={`text-[11px] font-medium truncate ${T.apptText}`}>{apptVal}</span>
+                            <span className={`ml-auto text-[9px] px-1.5 py-0.5 rounded font-medium shrink-0 ${T.apptConfirmed}`}>CONFIRMED</span>
                           </motion.div>
                         )}
                       </AnimatePresence>
@@ -610,17 +768,17 @@ function DemoModal({ onClose }) {
                             {status}
                           </motion.span>
                         </AnimatePresence>
-                        {pc && <span className="flex items-center gap-1 text-[11px] text-zinc-500"><MapPin size={11} />{pc}</span>}
-                        {ph && <span className="flex items-center gap-1 text-[11px] text-zinc-500"><Phone size={11} />{ph}</span>}
-                        <span className="text-[11px] text-zinc-700 ml-auto">Just now</span>
+                        {pc && <span className={`flex items-center gap-1 text-[11px] ${T.metaText}`}><MapPin size={11} />{pc}</span>}
+                        {ph && <span className={`flex items-center gap-1 text-[11px] ${T.metaText}`}><Phone size={11} />{ph}</span>}
+                        <span className={`text-[11px] ml-auto ${T.lastMeta}`}>Just now</span>
                       </div>
 
                       {/* row 3 — source + urgency */}
                       <div className="flex items-center gap-2 mt-1.5">
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium border bg-emerald-500/10 border-emerald-500/20 text-emerald-400">
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium border ${T.sourceBadge}`}>
                           <MessageCircle size={10} /> WhatsApp
                         </span>
-                        {urg && <span className="text-[11px] font-medium text-red-400">Emergency</span>}
+                        {urg && <span className={`text-[11px] font-medium ${T.urgencyText}`}>Emergency</span>}
                       </div>
                     </motion.div>
                   )}
@@ -632,15 +790,15 @@ function DemoModal({ onClose }) {
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="rounded-xl border border-emerald-500/25 bg-emerald-500/[0.06] p-3.5"
+                  className={`rounded-xl border p-3.5 ${T.endedCard}`}
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <CheckCircle2 size={15} className="text-emerald-400" />
-                    <p className="text-[13px] text-zinc-100 font-semibold">Emergency job booked</p>
+                    <p className={`text-[13px] font-semibold ${T.endedTitle}`}>Emergency job booked</p>
                   </div>
-                  <p className="text-zinc-400 text-[12px] leading-relaxed">
-                    Zero staff time — the AI qualified the homeowner, scored the lead HOT and booked the
-                    inspection, all landing in your CRM automatically.
+                  <p className={`text-[12px] leading-relaxed ${T.endedBody}`}>
+                    Zero staff time. The AI qualified the homeowner, scored the lead HOT, and booked the
+                    inspection, and it all landed straight in your CRM.
                   </p>
                 </motion.div>
               )}
@@ -681,7 +839,7 @@ export default function RooferDemo() {
             {/* mini chat preview */}
             <div className="relative flex flex-col items-center gap-4">
               <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center text-white"
+                className="w-16 h-16 rounded-2xl flex items-center justify-center text-[#fff]"
                 style={{ background: `linear-gradient(to bottom right, ${ACCENT}, ${ACCENT_2})`, boxShadow: `0 0 30px ${ACCENT}66` }}
               >
                 <MessageCircle size={26} />
@@ -694,7 +852,7 @@ export default function RooferDemo() {
             </div>
 
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-bg-primary/30">
-              <span className="flex items-center gap-2 px-5 py-2.5 rounded-full font-heading font-semibold text-sm text-white" style={{ background: ACCENT }}>
+              <span className="flex items-center gap-2 px-5 py-2.5 rounded-full font-heading font-semibold text-sm text-[#fff]" style={{ background: ACCENT }}>
                 <Play size={14} /> View Demo
               </span>
             </div>
@@ -720,13 +878,13 @@ export default function RooferDemo() {
               RoofDesk AI Receptionist
             </h3>
             <p className="text-white/45 text-sm leading-relaxed mb-5">
-              A WhatsApp AI that answers every enquiry, qualifies the homeowner, scores the lead and books the
-              inspection — and it all lands in the roofer's CRM in real time. Watch a storm leak become a booked job.
+              A WhatsApp AI that answers every enquiry, qualifies the homeowner, scores the lead, and books the
+              inspection. It all lands in the roofer's CRM in real time. Watch a storm leak become a booked job.
             </p>
 
             <button
               onClick={() => setOpen(true)}
-              className="self-start relative inline-flex items-center gap-2 px-7 py-3.5 font-heading font-semibold text-sm rounded-full transition-all duration-300 hover:scale-105 active:scale-95 text-white"
+              className="self-start relative inline-flex items-center gap-2 px-7 py-3.5 font-heading font-semibold text-sm rounded-full transition-all duration-300 hover:scale-105 active:scale-95 text-[#fff]"
               style={{ background: ACCENT, boxShadow: `0 0 30px ${ACCENT}40` }}
             >
               <Play size={15} /> View Demo

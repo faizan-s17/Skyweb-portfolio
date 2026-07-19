@@ -1,46 +1,12 @@
 import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import DentalDemo from './DentalDemo'
-import BarberDemo from './BarberDemo'
 import RooferDemo from './RooferDemo'
-
-const projects = [
-  {
-    title: 'AI Lead Generation System',
-    category: 'AI Automation',
-    description: 'Built an intelligent multi-step outreach pipeline that qualifies and books 40+ leads/week automatically.',
-    gradient: 'from-[#00e5c0]/20 to-[#00b4d8]/5',
-    accent: '#00e5c0',
-    tags: ['n8n', 'OpenAI', 'HubSpot'],
-  },
-  {
-    title: 'E-Commerce SaaS Redesign',
-    category: 'UI/UX Design',
-    description: 'Full product redesign for a UK-based SaaS platform — increased conversion by 62% in 3 months.',
-    gradient: 'from-[#ff5722]/20 to-[#f5a623]/5',
-    accent: '#ff5722',
-    tags: ['Figma', 'React', 'Framer'],
-  },
-  {
-    title: 'Real Estate Voice Agent',
-    category: 'Voice AI',
-    description: 'A voice AI that handles inbound calls, qualifies prospects and books viewings — 24/7, zero staff cost.',
-    gradient: 'from-[#a855f7]/20 to-[#6366f1]/5',
-    accent: '#a855f7',
-    tags: ['Retell AI', 'Calendly', 'CRM'],
-  },
-  {
-    title: 'Legal Firm SEO Campaign',
-    category: 'SEO',
-    description: 'Took a London law firm from page 4 to #1 ranking for 12 high-intent keywords in 4 months.',
-    gradient: 'from-[#10b981]/20 to-[#059669]/5',
-    accent: '#10b981',
-    tags: ['SEMrush', 'Content', 'Technical SEO'],
-  },
-]
+import { accentColor, useIsLight } from '../lib/theme'
 
 /* Standout, accent-branded heading for each demo category */
-function CategoryHeader({ index, eyebrow, title, accentWord, tagline, description, accent }) {
+function CategoryHeader({ index, eyebrow, title, accentWord, tagline, description, accent, isLight }) {
+  const textAccent = accentColor(accent, isLight)
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -58,13 +24,13 @@ function CategoryHeader({ index, eyebrow, title, accentWord, tagline, descriptio
         <div>
           <span
             className="inline-block font-mono text-[11px] tracking-[0.25em] uppercase px-2.5 py-1 rounded-md mb-3"
-            style={{ background: `${accent}14`, color: accent, border: `1px solid ${accent}33` }}
+            style={{ background: `${accent}14`, color: textAccent, border: `1px solid ${accent}33` }}
           >
             {eyebrow}
           </span>
           <h3 className="font-heading font-bold text-white text-[1.6rem] sm:text-[2.1rem] leading-[1.1] tracking-tight">
             {title}{' '}
-            {accentWord && <span style={{ color: accent }}>{accentWord}</span>}
+            {accentWord && <span style={{ color: textAccent }}>{accentWord}</span>}
           </h3>
           {tagline && (
             <p className="text-white/75 text-sm font-medium mt-1.5">{tagline}</p>
@@ -86,10 +52,49 @@ function CategoryHeader({ index, eyebrow, title, accentWord, tagline, descriptio
   )
 }
 
+/* Flagship showcase — lifts a demo category off the page with an
+ * accent-tinted glow and a defined border, instead of a heading + card
+ * sitting directly on the section background. */
+function ShowcasePanel({ accent, children }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ duration: 0.7 }}
+      className="relative rounded-[2rem] border overflow-hidden p-6 sm:p-8 lg:p-10 mb-16"
+      style={{
+        borderColor: `${accent}26`,
+        background: `linear-gradient(180deg, ${accent}0d 0%, transparent 60%)`,
+        boxShadow: `0 30px 90px -40px ${accent}33`,
+      }}
+    >
+      {/* decorative corner glow + grid, kept inside the panel's own stacking context */}
+      <div className="absolute inset-0 bg-grid opacity-[0.35] pointer-events-none" />
+      <div
+        className="absolute -top-36 -right-24 w-80 h-80 rounded-full blur-[100px] pointer-events-none"
+        style={{ background: `${accent}26` }}
+      />
+      <div className="relative">{children}</div>
+    </motion.div>
+  )
+}
+
 export default function Work() {
+  const isLight = useIsLight()
   return (
     <section id="work" className="py-28 bg-bg-primary relative overflow-hidden">
       <div className="absolute inset-0 bg-grid opacity-40" />
+      {/* ambient atmosphere — echoes the two demo accents, kept subtle so it reads
+          as depth rather than decoration */}
+      <div
+        className="absolute top-0 left-[8%] w-[500px] h-[500px] rounded-full blur-[130px] opacity-[0.08] pointer-events-none"
+        style={{ background: '#4f9cf9' }}
+      />
+      <div
+        className="absolute bottom-0 right-[8%] w-[500px] h-[500px] rounded-full blur-[130px] opacity-[0.08] pointer-events-none"
+        style={{ background: '#ff5722' }}
+      />
 
       <div className="relative max-w-7xl mx-auto px-6">
         {/* Section header */}
@@ -107,102 +112,43 @@ export default function Work() {
             </h2>
           </div>
           <p className="text-white/40 text-sm max-w-sm leading-relaxed">
-            Interactive, live demos you can try right here — plus selected automation, design and growth work.
+            Interactive, live demos you can try right here: real calls handled end-to-end by our AI.
           </p>
         </motion.div>
 
         {/* ───── Category 01 · AI Receptionist ───── */}
-        <CategoryHeader
-          index="01"
-          eyebrow="Live Voice Demos"
-          title="SkyWeb"
-          accentWord="FrontDesk"
-          tagline="AI Voice Receptionist"
-          accent="#00e5c0"
-          description="One voice AI that answers every call, qualifies the caller and books the appointment — shown here for dental and barbershops. Listen to real calls handled end-to-end."
-        />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8 mb-24">
-          <DentalDemo />
-          <BarberDemo />
-        </div>
+        <ShowcasePanel accent="#4f9cf9">
+          <CategoryHeader
+            index="01"
+            eyebrow="Live Voice Demo"
+            title="SkyWeb"
+            accentWord="FrontDesk"
+            tagline="AI Voice Receptionist"
+            accent="#4f9cf9"
+            isLight={isLight}
+            description="One voice AI answers every call, qualifies the caller, and books the appointment. Deploy it for dental, barbershops, med spas, and beyond. Press play to hear a real call handled end-to-end."
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
+            <DentalDemo />
+          </div>
+        </ShowcasePanel>
 
         {/* ───── Category 02 · AI Roofing Receptionist + CRM ───── */}
-        <CategoryHeader
-          index="02"
-          eyebrow="Flagship Build"
-          title="SkyWeb"
-          accentWord="RoofDesk"
-          tagline="AI Receptionist + CRM"
-          accent="#4f9cf9"
-          description="A WhatsApp AI captures and qualifies the lead, and a full CRM runs the job — watch a storm leak become a booked job, live."
-        />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8 mb-24">
-          <RooferDemo />
-        </div>
-
-        {/* ───── Category 03 · Selected Work ───── */}
-        <CategoryHeader
-          index="03"
-          eyebrow="Selected Work"
-          title="More"
-          accentWord="Projects"
-          accent="#a855f7"
-          description="A selection of automation, design and growth work — each shipped with measurable business impact."
-        />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
-          {projects.map((p, i) => (
-            <motion.div
-              key={p.title}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.7, delay: i * 0.1 }}
-              className="group card-glass overflow-hidden hover:border-white/[0.12] transition-colors duration-500"
-            >
-              {/* Visual block */}
-              <div className={`relative h-52 bg-gradient-to-br ${p.gradient} flex items-center justify-center overflow-hidden`}>
-                {/* Decorative geometry */}
-                <div
-                  className="absolute w-48 h-48 rounded-full border opacity-20"
-                  style={{ borderColor: p.accent, top: '-20%', right: '-10%' }}
-                />
-                <div
-                  className="absolute w-24 h-24 rotate-45 border opacity-15"
-                  style={{ borderColor: p.accent, bottom: '-10%', left: '10%' }}
-                />
-                <span className="font-heading font-bold text-6xl opacity-[0.06] text-white select-none">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                {/* Hover overlay */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-full font-heading font-semibold text-sm"
-                    style={{ background: p.accent, color: '#050508' }}
-                  >
-                    View Project <ArrowUpRight size={14} />
-                  </div>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-7">
-                <div className="flex items-center justify-between mb-3">
-                  <span
-                    className="text-xs font-mono px-2.5 py-1 rounded-md"
-                    style={{ background: `${p.accent}15`, color: p.accent, border: `1px solid ${p.accent}25` }}
-                  >
-                    {p.category}
-                  </span>
-                  <ArrowUpRight size={16} className="text-white/20 group-hover:text-white/60 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
-                </div>
-                <h3 className="font-heading font-bold text-white text-lg mb-2 group-hover:text-accent-teal transition-colors duration-300">
-                  {p.title}
-                </h3>
-                <p className="text-white/40 text-sm leading-relaxed">{p.description}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        <ShowcasePanel accent="#ff5722">
+          <CategoryHeader
+            index="02"
+            eyebrow="Flagship Build"
+            title="SkyWeb"
+            accentWord="RoofDesk"
+            tagline="AI Receptionist + CRM"
+            accent="#ff5722"
+            isLight={isLight}
+            description="A WhatsApp AI captures and qualifies the lead, and a full CRM runs the job from there. Watch a storm leak become a booked job, live."
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
+            <RooferDemo />
+          </div>
+        </ShowcasePanel>
 
         {/* Upwork CTA */}
         <motion.div

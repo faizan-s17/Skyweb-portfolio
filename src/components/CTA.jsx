@@ -26,7 +26,7 @@ export default function CTA() {
           </h2>
 
           <p className="text-white/40 text-lg max-w-2xl mx-auto mb-12 leading-relaxed">
-            Drop us a message and we'll get back within 24 hours. First consultation is always free — no pitch, just strategy.
+            Drop us a message and we'll get back within 24 hours. First consultation is always free, no pitch, just strategy.
           </p>
 
           {/* Contact options */}

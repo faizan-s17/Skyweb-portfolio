@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { accentColor, useIsLight } from '../lib/theme'
 
 const steps = [
   {
@@ -10,7 +11,7 @@ const steps = [
   {
     num: '02',
     title: 'Strategy & Design',
-    description: 'Our team crafts a tailored plan — UI wireframes, automation maps, or SEO roadmap — approved before we build.',
+    description: 'Our team crafts a tailored plan (UI wireframes, automation maps, or an SEO roadmap) and gets your approval before we build.',
     color: '#ff5722',
   },
   {
@@ -22,12 +23,13 @@ const steps = [
   {
     num: '04',
     title: 'Launch & Grow',
-    description: 'We go live, monitor performance, and iterate. Your success is our KPI — we don\'t disappear after handoff.',
+    description: 'We go live, monitor performance, and keep iterating. And we don\'t disappear after handoff.',
     color: '#a855f7',
   },
 ]
 
 export default function Process() {
+  const isLight = useIsLight()
   return (
     <section id="process" className="py-28 bg-bg-secondary relative overflow-hidden">
       {/* Decorative line */}
@@ -74,7 +76,7 @@ export default function Process() {
                     boxShadow: `0 0 40px ${step.color}10`,
                   }}
                 >
-                  <span className="font-heading font-bold text-2xl" style={{ color: step.color }}>
+                  <span className="font-heading font-bold text-2xl" style={{ color: accentColor(step.color, isLight) }}>
                     {step.num}
                   </span>
                   {/* Pulse ring */}

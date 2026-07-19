@@ -3,17 +3,26 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      /*
+       * Theme tokens resolve through CSS variables (see index.css), so the whole
+       * site flips between dark (default) and light (`html.light`) without every
+       * component needing its own variant. `white` is deliberately remapped to
+       * the foreground ink: that makes the existing text-white/x, bg-white/x and
+       * border-white/x utilities theme-aware for free. Where a literal white is
+       * genuinely needed (icons on coloured gradients) use text-[#fff].
+       */
       colors: {
         bg: {
-          primary: '#050508',
-          secondary: '#0a0a0f',
-          card: '#0e0e14',
+          primary: 'rgb(var(--bg-primary) / <alpha-value>)',
+          secondary: 'rgb(var(--bg-secondary) / <alpha-value>)',
+          card: 'rgb(var(--bg-card) / <alpha-value>)',
         },
         accent: {
-          teal: '#00e5c0',
+          teal: 'rgb(var(--accent-teal) / <alpha-value>)',
           orange: '#ff5722',
           gold: '#f5a623',
         },
+        white: 'rgb(var(--fg) / <alpha-value>)',
       },
       fontFamily: {
         sans: ['Inter', 'Inter Fallback', 'system-ui', 'sans-serif'],
@@ -21,7 +30,7 @@ export default {
         mono: ['JetBrains Mono', 'monospace'],
       },
       backgroundImage: {
-        'grid-pattern': `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
+        'grid-pattern': `linear-gradient(rgb(var(--grid-line) / var(--grid-alpha)) 1px, transparent 1px),linear-gradient(90deg, rgb(var(--grid-line) / var(--grid-alpha)) 1px, transparent 1px)`,
       },
       backgroundSize: {
         grid: '60px 60px',

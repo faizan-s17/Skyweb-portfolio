@@ -162,7 +162,7 @@ export default function Hero() {
           custom={2}
           className="text-white/50 text-lg max-w-2xl mx-auto mb-10 leading-relaxed font-sans"
         >
-          UI/UX design, AI automation, intelligent agents, SEO & chatbots — everything your
+          UI/UX design, AI automation, intelligent agents, SEO & chatbots: everything your
           business needs to grow fast and convert better.
         </motion.p>
 

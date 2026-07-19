@@ -29,7 +29,7 @@ export default function Footer({ onNavigate }) {
               <span className="font-heading font-bold text-lg text-white">SkyWeb</span>
             </div>
             <p className="text-white/35 text-sm leading-relaxed mb-6 max-w-xs">
-              A UK-based digital agency building intelligent products — UI, AI automation, and growth tools for modern businesses.
+              A UK-based digital agency building UI, AI automation, and growth tools for modern businesses.
             </p>
             {/* Socials */}
             <div className="flex items-center gap-3">

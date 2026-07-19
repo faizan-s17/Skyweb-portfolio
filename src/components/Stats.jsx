@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { accentColor, useIsLight } from '../lib/theme'
 
 const stats = [
   { value: 50, suffix: '+', label: 'Projects Delivered', color: '#00e5c0' },
@@ -35,6 +36,7 @@ function Counter({ value, suffix, color }) {
 }
 
 export default function Stats() {
+  const isLight = useIsLight()
   return (
     <section id="stats" className="py-24 bg-bg-secondary relative overflow-hidden">
       {/* Glow */}
@@ -64,7 +66,7 @@ export default function Stats() {
               transition={{ duration: 0.6, delay: i * 0.1 }}
               className="bg-bg-secondary px-8 py-10 flex flex-col items-center text-center gap-2 group hover:bg-bg-card transition-colors duration-300"
             >
-              <Counter value={s.value} suffix={s.suffix} color={s.color} />
+              <Counter value={s.value} suffix={s.suffix} color={accentColor(s.color, isLight)} />
               <span className="text-white/40 text-sm font-sans mt-1">{s.label}</span>
             </motion.div>
           ))}
