@@ -5,6 +5,7 @@ import {
   Play, Pause, X, RotateCcw, PhoneCall, ArrowUpRight, Waypoints, Clock,
   Stethoscope, CalendarClock, CheckCheck, User, ShieldCheck, MailCheck, CalendarCheck,
   Scissors, UserCheck, Smartphone, MessageSquare, Sparkles, Flower2, CheckCircle2,
+  Mic, PhoneOff, Loader2,
 } from 'lucide-react'
 
 /* ------------------------------------------------------------------ *
@@ -149,6 +150,7 @@ const DEMOS = [
     intro: 'Press play to hear a real booking, answered, matched to the right barber, and confirmed by text.',
     booked: 'Zero staff time. The AI greeted the caller, matched them to their barber, booked the slot, and sent a confirmation text, all in under a minute.',
     features: ['Answers instantly, 24/7', 'Matches the right barber', 'Texts a confirmation automatically'],
+    liveAgent: true,
   },
   { id: 'medspa', label: 'Med Spas',      Icon: Sparkles, ready: false, theme: THEMES.medspa },
   { id: 'salon',  label: 'Salons & Spas', Icon: Flower2,  ready: false, theme: THEMES.salon },
@@ -175,6 +177,170 @@ function roundRectPath(c, x, y, w, h, r) {
   c.closePath()
 }
 
+/* ================== Live agent (Dograh, headless) ================= *
+ * The Dograh embed script (loaded in index.html) exposes a headless
+ * window.DograhWidget API — no UI of its own, so we drive our own
+ * button, status and live transcript off it, themed per-niche. Only
+ * niches with `liveAgent: true` actually have a deployed agent behind
+ * this token. One instance is shared by the whole modal (button +
+ * transcript stage) so they always agree on call state. */
+function useDograhWidget() {
+  const [ready, setReady] = useState(false)
+  const [status, setStatus] = useState('idle') // idle | connecting | connected | failed
+  const [turns, setTurns] = useState([])
+  const [callEnded, setCallEnded] = useState(false)
+  const idRef = useRef(0)
+
+  useEffect(() => {
+    let cancelled = false
+    const poll = setInterval(() => {
+      if (window.DograhWidget) {
+        clearInterval(poll)
+        if (cancelled) return
+        const w = window.DograhWidget
+        setReady(true)
+        w.onStatusChange?.((s) => { if (!cancelled) setStatus(s) })
+        w.onError?.(() => { if (!cancelled) setStatus('failed') })
+        w.onCallStart?.(() => { if (!cancelled) { setTurns([]); setCallEnded(false) } })
+        w.onCallEnd?.(() => { if (!cancelled) setCallEnded(true) })
+        // transcript: message shape isn't pinned down in the docs, so read
+        // defensively across the field names voice/chat widgets commonly use
+        w.onMessage?.((m) => {
+          if (cancelled || !m) return
+          const role = m.role || m.speaker || m.sender || 'assistant'
+          const text = m.text ?? m.content ?? m.message ?? ''
+          if (!text) return
+          setTurns((prev) => [...prev, { id: idRef.current++, role, text }])
+        })
+      }
+    }, 250)
+    return () => { cancelled = true; clearInterval(poll) }
+  }, [])
+
+  const start = useCallback((context) => {
+    if (!window.DograhWidget) return
+    window.DograhWidget.setContext?.(context)
+    window.DograhWidget.start()
+  }, [])
+
+  const end = useCallback(() => { window.DograhWidget?.end() }, [])
+
+  const reset = useCallback(() => { setTurns([]); setCallEnded(false) }, [])
+
+  return { ready, status, turns, callEnded, start, end, reset }
+}
+
+function LiveAgentButton({ theme, company, dograh }) {
+  const isLive = dograh.status === 'connected' || dograh.status === 'connecting'
+
+  const handleClick = () => {
+    if (!dograh.ready) return
+    if (isLive) dograh.end()
+    else dograh.start({ demo: company, page_url: window.location.href })
+  }
+
+  const label = dograh.status === 'connecting' ? 'Connecting…'
+    : dograh.status === 'connected' ? 'End Call'
+    : dograh.status === 'failed' ? 'Try Again'
+    : 'Talk to It Live'
+
+  return (
+    <button
+      onClick={handleClick}
+      disabled={!dograh.ready}
+      aria-live="polite"
+      className="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-heading font-semibold transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100 disabled:cursor-not-allowed"
+      style={{ borderColor: rgba(theme.glow, 0.35), color: theme.main, background: isLive ? rgba(theme.glow, 0.12) : 'transparent' }}
+    >
+      {dograh.status === 'connecting'
+        ? <Loader2 size={13} className="animate-spin" />
+        : isLive ? <PhoneOff size={13} /> : <Mic size={13} />}
+      {dograh.ready ? label : 'Loading Agent…'}
+    </button>
+  )
+}
+
+/* live call stage — replaces the recorded canvas/subtitle block in the
+ * center of the modal while a real call (via LiveAgentButton) is active,
+ * showing the actual transcript as it comes in. */
+function LiveCallStage({ theme, company, dograh }) {
+  const listRef = useRef(null)
+
+  useEffect(() => {
+    const el = listRef.current
+    if (el) el.scrollTop = el.scrollHeight
+  }, [dograh.turns.length])
+
+  const statusLabel = dograh.status === 'connecting' ? 'Connecting…'
+    : dograh.status === 'connected' ? 'Live — listening'
+    : dograh.status === 'failed' ? 'Call failed'
+    : dograh.callEnded ? 'Call ended'
+    : 'Ready'
+
+  return (
+    <div className="flex-1 w-full flex flex-col min-h-[42vh] lg:min-h-0">
+      <div className="flex items-center justify-center gap-2 pt-1 pb-4 shrink-0">
+        <span
+          className={`w-2 h-2 rounded-full ${dograh.status === 'connected' ? 'animate-pulse' : ''}`}
+          style={{ background: theme.main }}
+        />
+        <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/50">{statusLabel}</span>
+      </div>
+
+      <div ref={listRef} className="flex-1 min-h-0 overflow-y-auto px-1 space-y-3 max-w-2xl mx-auto w-full">
+        {dograh.turns.length === 0 ? (
+          <div className="h-full flex flex-col items-center justify-center text-center gap-4 py-8">
+            <span
+              className={`w-16 h-16 rounded-2xl flex items-center justify-center text-[#fff] ${dograh.status === 'connecting' || dograh.status === 'connected' ? 'animate-pulse' : ''}`}
+              style={{ background: `linear-gradient(135deg, ${theme.main}, ${theme.deep})`, boxShadow: `0 0 30px ${rgba(theme.glow, 0.4)}` }}
+            >
+              <Mic size={26} />
+            </span>
+            <p className="text-white/45 text-base sm:text-lg leading-relaxed max-w-sm">
+              {dograh.status === 'connecting'
+                ? `Connecting you to ${company}…`
+                : dograh.status === 'connected'
+                  ? 'Say hello — the agent is listening.'
+                  : dograh.callEnded
+                    ? 'Call ended. Start another one whenever you like.'
+                    : 'Waiting for the call to start…'}
+            </p>
+          </div>
+        ) : (
+          <AnimatePresence initial={false}>
+            {dograh.turns.map((turn) => {
+              const isAgent = turn.role !== 'user' && turn.role !== 'caller' && turn.role !== 'visitor'
+              return (
+                <motion.div
+                  key={turn.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25, ease: 'easeOut' }}
+                  className={`flex ${isAgent ? 'justify-start' : 'justify-end'}`}
+                >
+                  <div
+                    className="max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed text-left"
+                    style={
+                      isAgent
+                        ? { background: rgba(theme.glow, 0.12), border: `1px solid ${rgba(theme.glow, 0.28)}`, color: '#fff' }
+                        : { background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.8)' }
+                    }
+                  >
+                    <p className="text-[9px] font-mono uppercase tracking-wider mb-1 opacity-60">
+                      {isAgent ? 'AI Receptionist' : 'You'}
+                    </p>
+                    {turn.text}
+                  </div>
+                </motion.div>
+              )
+            })}
+          </AnimatePresence>
+        )}
+      </div>
+    </div>
+  )
+}
+
 /* ============================ Modal ============================== */
 function DemoModal({ onClose, initialId = 'dental' }) {
   const audioRef = useRef(null)
@@ -198,8 +364,19 @@ function DemoModal({ onClose, initialId = 'dental' }) {
   const [activeLine, setActiveLine] = useState(-1)
   const [ended, setEnded] = useState(false)
 
+  const dograh = useDograhWidget()
+  const dograhStatusRef = useRef(dograh.status)
+  useEffect(() => { dograhStatusRef.current = dograh.status }, [dograh.status])
+  // hang up an in-progress call if the visitor closes the modal outright
+  useEffect(() => () => {
+    if (dograhStatusRef.current === 'connected' || dograhStatusRef.current === 'connecting') {
+      window.DograhWidget?.end()
+    }
+  }, [])
+
   const demo = DEMOS.find((d) => d.id === activeId) || DEMOS[0]
   const t = demo.theme
+  const showLiveStage = demo.liveAgent && (dograh.status === 'connecting' || dograh.status === 'connected' || dograh.callEnded)
   const demoRef = useRef(demo)
   useEffect(() => { demoRef.current = demo }, [demo])
 
@@ -409,6 +586,8 @@ function DemoModal({ onClose, initialId = 'dental' }) {
     activeLineRef.current = -1
     interactedRef.current = false
     pendingPlayRef.current = next.ready
+    if (dograh.status === 'connected' || dograh.status === 'connecting') dograh.end()
+    dograh.reset()
     setActiveId(id)
   }
 
@@ -466,7 +645,11 @@ function DemoModal({ onClose, initialId = 'dental' }) {
   const lines = demo.lines || []
   const winStart = activeLine >= 0 ? Math.max(0, activeLine - 2) : 0
   const subWindow = (demo.ready && activeLine >= 0) ? lines.slice(winStart, activeLine + 1) : []
-  const status = !demo.ready ? 'Soon' : isPlaying ? 'Live' : ended ? 'Ended' : 'Ready'
+  const status = !demo.ready
+    ? 'Soon'
+    : showLiveStage
+      ? (dograh.status === 'connecting' ? 'Connecting' : dograh.status === 'connected' ? 'Live Call' : 'Call Ended')
+      : isPlaying ? 'Live' : ended ? 'Ended' : 'Ready'
 
   return createPortal(
     <motion.div
@@ -541,7 +724,7 @@ function DemoModal({ onClose, initialId = 'dental' }) {
             className="ml-auto flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-full transition-colors duration-500"
             style={{ background: rgba(t.glow, 0.12), border: `1px solid ${rgba(t.glow, 0.3)}`, color: t.main }}
           >
-            <span className={`w-1.5 h-1.5 rounded-full ${isPlaying ? 'animate-pulse' : ''}`} style={{ background: t.main }} />
+            <span className={`w-1.5 h-1.5 rounded-full ${isPlaying || dograh.status === 'connected' ? 'animate-pulse' : ''}`} style={{ background: t.main }} />
             {status}
           </span>
           <button
@@ -617,7 +800,9 @@ function DemoModal({ onClose, initialId = 'dental' }) {
 
           {/* ---- center stage ---- */}
           <section className="order-2 lg:order-none relative flex flex-col items-center justify-end px-5 sm:px-8 pt-8 pb-6 min-h-[42vh] lg:min-h-0">
-            {demo.ready ? (
+            {showLiveStage ? (
+              <LiveCallStage theme={t} company={demo.company} dograh={dograh} />
+            ) : demo.ready ? (
               <>
                 {/* listening indicator */}
                 <div className="absolute top-5 left-1/2 -translate-x-1/2 flex items-center gap-2">
@@ -743,11 +928,39 @@ function DemoModal({ onClose, initialId = 'dental' }) {
             )}
           </section>
 
-          {/* ---- right rail: captured pop-ups ---- */}
+          {/* ---- right rail: captured pop-ups (recorded) or live-call info ---- */}
           <aside
             className="order-3 lg:order-none border-t lg:border-t-0 lg:border-l border-white/[0.07] p-4 sm:p-5 lg:overflow-y-auto"
             style={{ background: surf.rail }}
           >
+            {showLiveStage ? (
+              <div className="space-y-4">
+                <p className="section-label" style={{ color: t.main }}>Live Agent</p>
+                <div
+                  className="p-4 rounded-2xl"
+                  style={{ background: surf.card, border: `1px solid ${rgba(t.glow, 0.16)}`, boxShadow: surf.cardShadow }}
+                >
+                  <p className="text-sm text-white font-semibold mb-1">{demo.company}</p>
+                  <p className="text-white/45 text-xs leading-relaxed">
+                    This is a real, working agent, not a recording. Wired the same way it'd sit on your own site,
+                    answering calls for your business 24/7.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {demo.features?.map((f) => (
+                    <span
+                      key={f}
+                      className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full"
+                      style={{ background: ink(0.04), border: `1px solid ${ink(0.09)}`, color: ink(0.65) }}
+                    >
+                      <CheckCircle2 size={12} style={{ color: t.main }} />
+                      {f}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <>
             <div className="flex items-center justify-between mb-4">
               <p className="section-label" style={{ color: t.main }}>Captured by AI</p>
               <span className="text-[10px] font-mono text-white/30">{visibleCards.length}/{demo.ready ? cards.length : 0}</span>
@@ -808,60 +1021,82 @@ function DemoModal({ onClose, initialId = 'dental' }) {
                 </div>
               )}
             </div>
+              </>
+            )}
           </aside>
         </div>
 
         {/* ============ footer controls ============ */}
         <div className="relative z-10 px-4 sm:px-6 py-3.5 border-t border-white/[0.07]" style={{ background: surf.footer }}>
-          <div
-            onClick={seek}
-            onKeyDown={seekKey}
-            role="slider"
-            tabIndex={demo.ready ? 0 : -1}
-            aria-label="Seek through the call"
-            aria-valuemin={0}
-            aria-valuemax={Math.round(duration) || 0}
-            aria-valuenow={Math.round(time)}
-            aria-disabled={!demo.ready}
-            className="group relative w-full py-1.5 rounded focus:outline-none focus-visible:ring-2"
-            style={{ '--tw-ring-color': rgba(t.glow, 0.5), cursor: demo.ready ? undefined : 'default' }}
-          >
-            <div className="h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
-              <div
-                className="h-full rounded-full transition-[width] duration-150"
-                style={{ width: `${progress}%`, background: `linear-gradient(to right, ${t.main}, ${t.deep})` }}
-              />
+          {showLiveStage ? (
+            <div className="flex items-center gap-4">
+              <LiveAgentButton theme={t} company={demo.company} dograh={dograh} />
+              <span className="hidden sm:block text-white/35 text-xs">
+                {dograh.status === 'connected'
+                  ? 'Real call, live right now. Talk naturally, just like a phone call.'
+                  : dograh.status === 'connecting'
+                    ? 'Connecting your microphone…'
+                    : 'Call ended — press to start another one.'}
+              </span>
             </div>
-          </div>
-          <div className="flex items-center gap-4 mt-2.5">
-            <button
-              onClick={togglePlay}
-              disabled={!demo.ready}
-              aria-label={isPlaying ? 'Pause' : 'Play'}
-              className="w-12 h-12 rounded-full flex items-center justify-center text-[#061024] hover:scale-105 active:scale-95 transition-transform disabled:opacity-40 disabled:hover:scale-100 disabled:cursor-default"
-              style={{ background: t.main, boxShadow: `0 0 28px ${rgba(t.glow, 0.45)}` }}
-            >
-              {isPlaying ? <Pause size={18} /> : <Play size={18} className="ml-0.5" />}
-            </button>
-            <button
-              onClick={replay}
-              disabled={!demo.ready}
-              aria-label="Replay"
-              className="w-9 h-9 rounded-full bg-white/[0.04] border border-white/10 text-white/60 hover:text-white flex items-center justify-center transition-colors disabled:opacity-40 disabled:cursor-default"
-            >
-              <RotateCcw size={15} />
-            </button>
-            <span className="hidden sm:block text-white/35 text-xs">
-              {!demo.ready
-                ? 'This demo hasn\'t been recorded yet.'
-                : isPlaying
-                  ? 'Real call, handled end-to-end. No staff, no hold time.'
-                  : 'Press play to start the live call.'}
-            </span>
-            <span className="ml-auto font-mono text-xs text-white/40 tabular-nums">
-              {fmt(demo.ready ? time : 0)} / {fmt(demo.ready ? duration : 0)}
-            </span>
-          </div>
+          ) : (
+            <>
+              <div
+                onClick={seek}
+                onKeyDown={seekKey}
+                role="slider"
+                tabIndex={demo.ready ? 0 : -1}
+                aria-label="Seek through the call"
+                aria-valuemin={0}
+                aria-valuemax={Math.round(duration) || 0}
+                aria-valuenow={Math.round(time)}
+                aria-disabled={!demo.ready}
+                className="group relative w-full py-1.5 rounded focus:outline-none focus-visible:ring-2"
+                style={{ '--tw-ring-color': rgba(t.glow, 0.5), cursor: demo.ready ? undefined : 'default' }}
+              >
+                <div className="h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-[width] duration-150"
+                    style={{ width: `${progress}%`, background: `linear-gradient(to right, ${t.main}, ${t.deep})` }}
+                  />
+                </div>
+              </div>
+              <div className="flex items-center gap-4 mt-2.5">
+                <button
+                  onClick={togglePlay}
+                  disabled={!demo.ready}
+                  aria-label={isPlaying ? 'Pause' : 'Play'}
+                  className="w-12 h-12 rounded-full flex items-center justify-center text-[#061024] hover:scale-105 active:scale-95 transition-transform disabled:opacity-40 disabled:hover:scale-100 disabled:cursor-default"
+                  style={{ background: t.main, boxShadow: `0 0 28px ${rgba(t.glow, 0.45)}` }}
+                >
+                  {isPlaying ? <Pause size={18} /> : <Play size={18} className="ml-0.5" />}
+                </button>
+                <button
+                  onClick={replay}
+                  disabled={!demo.ready}
+                  aria-label="Replay"
+                  className="w-9 h-9 rounded-full bg-white/[0.04] border border-white/10 text-white/60 hover:text-white flex items-center justify-center transition-colors disabled:opacity-40 disabled:cursor-default"
+                >
+                  <RotateCcw size={15} />
+                </button>
+                <span className="hidden sm:block text-white/35 text-xs">
+                  {!demo.ready
+                    ? 'This demo hasn\'t been recorded yet.'
+                    : isPlaying
+                      ? 'Real call, handled end-to-end. No staff, no hold time.'
+                      : 'Press play to start the live call.'}
+                </span>
+                {demo.liveAgent && (
+                  <div className="ml-auto">
+                    <LiveAgentButton theme={t} company={demo.company} dograh={dograh} />
+                  </div>
+                )}
+                <span className={`${demo.liveAgent ? 'ml-3' : 'ml-auto'} font-mono text-xs text-white/40 tabular-nums`}>
+                  {fmt(demo.ready ? time : 0)} / {fmt(demo.ready ? duration : 0)}
+                </span>
+              </div>
+            </>
+          )}
         </div>
       </motion.div>
     </motion.div>,
