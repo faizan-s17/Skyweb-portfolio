@@ -230,13 +230,17 @@ function useDograhWidget() {
   return { ready, status, turns, callEnded, start, end, reset }
 }
 
-function LiveAgentButton({ theme, company, dograh }) {
+function LiveAgentButton({ theme, company, dograh, onBeforeStart }) {
   const isLive = dograh.status === 'connected' || dograh.status === 'connecting'
 
   const handleClick = () => {
     if (!dograh.ready) return
-    if (isLive) dograh.end()
-    else dograh.start({ demo: company, page_url: window.location.href })
+    if (isLive) {
+      dograh.end()
+    } else {
+      onBeforeStart?.()
+      dograh.start({ demo: company, page_url: window.location.href })
+    }
   }
 
   const label = dograh.status === 'connecting' ? 'Connecting…'
@@ -344,6 +348,7 @@ function LiveCallStage({ theme, company, dograh }) {
 /* ============================ Modal ============================== */
 function DemoModal({ onClose, initialId = 'dental' }) {
   const audioRef = useRef(null)
+  const nicheRailRef = useRef(null)
   const voiceCanvasRef = useRef(null)
   const ctxRef = useRef(null)
   const analyserRef = useRef(null)
@@ -351,7 +356,6 @@ function DemoModal({ onClose, initialId = 'dental' }) {
   const rafRef = useRef(null)
   const lastTimeRef = useRef(0)
   const activeLineRef = useRef(-1)
-  const pendingPlayRef = useRef(false)
   // true once the user has pressed play, replay, or seeked at least once —
   // distinguishes "genuinely idle" from "paused mid-call", so the tick loop
   // below knows when it's safe to start tracking cues (see tick's guard).
@@ -554,22 +558,13 @@ function DemoModal({ onClose, initialId = 'dental' }) {
     }
   }, [])
 
-  /* after switching to a live demo (via a niche click) auto-start it */
-  useEffect(() => {
-    if (!pendingPlayRef.current) return
-    pendingPlayRef.current = false
+  /* stop the recorded playback the instant a real call starts, so the two
+     voices never talk over each other */
+  const stopRecordedPlayback = () => {
     const audio = audioRef.current
-    if (!audio) return
-    interactedRef.current = true
-    const start = async () => {
-      ensureGraph()
-      if (ctxRef.current && ctxRef.current.state === 'suspended') {
-        try { await ctxRef.current.resume() } catch { /* noop */ }
-      }
-      try { await audio.play(); setIsPlaying(true) } catch { /* user can press play */ }
-    }
-    start()
-  }, [activeId, ensureGraph])
+    if (audio) audio.pause()
+    setIsPlaying(false)
+  }
 
   const switchDemo = (id) => {
     if (id === activeId) return
@@ -585,10 +580,13 @@ function DemoModal({ onClose, initialId = 'dental' }) {
     lastTimeRef.current = 0
     activeLineRef.current = -1
     interactedRef.current = false
-    pendingPlayRef.current = next.ready
     if (dograh.status === 'connected' || dograh.status === 'connecting') dograh.end()
     dograh.reset()
     setActiveId(id)
+
+    const rail = nicheRailRef.current
+    const btn = rail?.querySelector(`[data-niche-id="${id}"]`)
+    btn?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
   }
 
   const togglePlay = async () => {
@@ -716,7 +714,8 @@ function DemoModal({ onClose, initialId = 'dental' }) {
               SkyWeb <span style={{ color: t.main }}>FrontDesk</span>
             </p>
             <p className="text-white/40 text-xs truncate">
-              AI Voice Receptionist{demo.company ? ` · ${demo.company}` : ` · ${demo.label}`}
+              <span className="hidden sm:inline">AI Voice Receptionist · </span>
+              {demo.company || demo.label}
             </p>
           </div>
 
@@ -751,16 +750,17 @@ function DemoModal({ onClose, initialId = 'dental' }) {
             <p className="text-white/40 text-xs leading-relaxed mb-4 hidden lg:block">
               Same receptionist, different front desk. Tap a niche to switch the live call.
             </p>
-            <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-1 lg:pb-0">
+            <div ref={nicheRailRef} className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-1 lg:pb-0 snap-x snap-mandatory lg:snap-none scroll-smooth">
               {DEMOS.map((n) => {
                 const isActive = n.id === activeId
                 const nt = n.theme
                 return (
                   <button
                     key={n.id}
+                    data-niche-id={n.id}
                     onClick={() => switchDemo(n.id)}
                     aria-pressed={isActive}
-                    className="shrink-0 flex items-center gap-2.5 rounded-xl px-3 py-2.5 border text-left transition-colors"
+                    className="shrink-0 flex items-center gap-2.5 rounded-xl px-3 py-2.5 border text-left transition-colors snap-center lg:snap-align-none"
                     style={
                       isActive
                         ? { background: rgba(nt.glow, 0.12), borderColor: rgba(nt.glow, 0.4) }
@@ -799,7 +799,14 @@ function DemoModal({ onClose, initialId = 'dental' }) {
           </aside>
 
           {/* ---- center stage ---- */}
-          <section className="order-2 lg:order-none relative flex flex-col items-center justify-end px-5 sm:px-8 pt-8 pb-6 min-h-[42vh] lg:min-h-0">
+          <section className="order-2 lg:order-none relative flex flex-col items-center justify-end px-5 sm:px-8 pt-8 pb-6 min-h-[42vh] lg:min-h-0 overflow-hidden">
+           <motion.div
+            key={`${activeId}-${showLiveStage ? 'live' : 'recorded'}`}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: 'easeOut' }}
+            className="w-full flex-1 flex flex-col items-center justify-end min-h-0"
+           >
             {showLiveStage ? (
               <LiveCallStage theme={t} company={demo.company} dograh={dograh} />
             ) : demo.ready ? (
@@ -821,16 +828,16 @@ function DemoModal({ onClose, initialId = 'dental' }) {
                 </div>
 
                 {/* centred voice line — the live "presence" of the call */}
-                <div className="flex-1 w-full flex items-center justify-center min-h-[110px] pointer-events-none">
+                <div className="flex-1 w-full flex items-center justify-center min-h-[70px] sm:min-h-[110px] pointer-events-none">
                   <canvas
                     ref={voiceCanvasRef}
-                    className="w-full max-w-xl h-[130px] select-none"
+                    className="w-full max-w-xl h-20 sm:h-[130px] select-none"
                     aria-hidden="true"
                   />
                 </div>
 
                 {/* scrolling subtitles */}
-                <div className="w-full max-w-2xl text-center min-h-[130px] flex flex-col justify-end gap-2">
+                <div className="w-full max-w-2xl text-center min-h-[100px] sm:min-h-[130px] flex flex-col justify-end gap-2">
                   <AnimatePresence initial={false}>
                     {subWindow.length > 0 ? (
                       subWindow.map((l, idx) => {
@@ -874,17 +881,17 @@ function DemoModal({ onClose, initialId = 'dental' }) {
                         className="flex flex-col items-center gap-4"
                       >
                         <span
-                          className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-[0.2em] px-3 py-1.5 rounded-full"
+                          className="hidden sm:inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-[0.2em] px-3 py-1.5 rounded-full"
                           style={{ background: rgba(t.glow, 0.12), border: `1px solid ${rgba(t.glow, 0.3)}`, color: t.main }}
                         >
                           <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: t.main }} />
                           Real recorded call, not scripted
                         </span>
-                        <p className="text-white/45 text-base sm:text-lg leading-relaxed max-w-lg">
+                        <p className="text-white/45 text-sm sm:text-lg leading-relaxed max-w-lg line-clamp-3 sm:line-clamp-none">
                           {demo.intro}
                         </p>
                         {demo.features && (
-                          <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+                          <div className="hidden sm:flex flex-wrap items-center justify-center gap-2 pt-1">
                             {demo.features.map((f) => (
                               <span
                                 key={f}
@@ -926,6 +933,7 @@ function DemoModal({ onClose, initialId = 'dental' }) {
                 </span>
               </div>
             )}
+           </motion.div>
           </section>
 
           {/* ---- right rail: captured pop-ups (recorded) or live-call info ---- */}
@@ -1088,7 +1096,7 @@ function DemoModal({ onClose, initialId = 'dental' }) {
                 </span>
                 {demo.liveAgent && (
                   <div className="ml-auto">
-                    <LiveAgentButton theme={t} company={demo.company} dograh={dograh} />
+                    <LiveAgentButton theme={t} company={demo.company} dograh={dograh} onBeforeStart={stopRecordedPlayback} />
                   </div>
                 )}
                 <span className={`${demo.liveAgent ? 'ml-3' : 'ml-auto'} font-mono text-xs text-white/40 tabular-nums`}>
