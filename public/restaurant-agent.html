@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flame Grill Piri Piri — Voice Agent</title>
+    <!--
+      Standalone host for the RESTAURANT Dograh agent.
+
+      Why this lives in an iframe rather than in index.html: the Dograh widget
+      exposes a single global (window.DograhWidget) and its snippet guards on a
+      fixed script id. The site already loads a different agent (dental) that
+      way, so a second token on the same page would collide and only one agent
+      would ever answer. An iframe gives each agent its own window object.
+
+      Rendered by src/components/RestaurantDemo.jsx with allow="microphone".
+    -->
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        height: 100%;
+        background: transparent;
+        font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        padding: 8px;
+      }
+      #call {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: 0;
+        cursor: pointer;
+        padding: 15px 30px;
+        border-radius: 999px;
+        font-family: 'Space Grotesk', Inter, sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        color: #0b0b0f;
+        background: #ef4444;
+        box-shadow: 0 0 34px rgba(239, 68, 68, 0.42);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+      #call:hover:not(:disabled) { transform: scale(1.04); }
+      #call:active:not(:disabled) { transform: scale(0.97); }
+      #call:disabled { cursor: default; opacity: 0.85; }
+      #call.live {
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+        border: 1px solid rgba(239, 68, 68, 0.55);
+        box-shadow: none;
+      }
+      .dot {
+        width: 9px; height: 9px; border-radius: 50%;
+        background: currentColor; flex: none;
+      }
+      .dot.pulse { animation: pulse 1.25s ease-in-out infinite; }
+      @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.8); } }
+      .status {
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.42);
+        text-align: center;
+        min-height: 16px;
+      }
+      .status.err { color: #fca5a5; text-transform: none; letter-spacing: 0; font-size: 12px; }
+      .bars { display: flex; align-items: flex-end; gap: 3px; height: 22px; }
+      .bars span {
+        width: 3px; border-radius: 2px; background: rgba(239, 68, 68, 0.75);
+        animation: bounce 1s ease-in-out infinite;
+      }
+      .bars.idle span { animation-play-state: paused; opacity: 0.28; }
+      @keyframes bounce { 0%,100% { height: 20%; } 50% { height: 100%; } }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="bars idle" id="bars">
+        <span style="animation-delay:0s"></span>
+        <span style="animation-delay:.1s"></span>
+        <span style="animation-delay:.2s"></span>
+        <span style="animation-delay:.3s"></span>
+        <span style="animation-delay:.4s"></span>
+        <span style="animation-delay:.5s"></span>
+        <span style="animation-delay:.6s"></span>
+      </div>
+
+      <button id="call" disabled>
+        <span class="dot"></span>
+        <span id="label">Loading…</span>
+      </button>
+
+      <p class="status" id="status">Microphone required</p>
+    </div>
+
+    <script>
+      (function () {
+        var btn = document.getElementById('call');
+        var label = document.getElementById('label');
+        var status = document.getElementById('status');
+        var bars = document.getElementById('bars');
+        var dot = btn.querySelector('.dot');
+        var state = 'idle';
+        var timer = null;
+        var seconds = 0;
+
+        var TEXT = {
+          idle: 'Talk to Alex',
+          connecting: 'Connecting…',
+          connected: 'End call',
+          failed: 'Try again',
+        };
+
+        function setStatus(text, isError) {
+          status.textContent = text;
+          status.className = isError ? 'status err' : 'status';
+        }
+
+        function render() {
+          label.textContent = TEXT[state] || TEXT.idle;
+          btn.classList.toggle('live', state === 'connected' || state === 'connecting');
+          dot.classList.toggle('pulse', state === 'connecting' || state === 'connected');
+          bars.classList.toggle('idle', state !== 'connected');
+        }
+
+        function startTimer() {
+          seconds = 0;
+          clearInterval(timer);
+          timer = setInterval(function () {
+            seconds++;
+            var m = Math.floor(seconds / 60);
+            var s = seconds % 60;
+            setStatus('On call · ' + m + ':' + (s < 10 ? '0' : '') + s);
+          }, 1000);
+        }
+
+        function stopTimer() { clearInterval(timer); timer = null; }
+
+        // The widget script is async — poll briefly until the global appears.
+        var tries = 0;
+        (function waitForWidget() {
+          if (window.DograhWidget) {
+            btn.disabled = false;
+            state = 'idle';
+            render();
+            setStatus('Tap to start a real call');
+
+            window.DograhWidget.onStatusChange(function (s) {
+              state = s;
+              render();
+              if (s === 'connecting') setStatus('Connecting…');
+              else if (s === 'connected') startTimer();
+              else if (s === 'failed') { stopTimer(); setStatus('Could not connect. Try again.', true); }
+              else { stopTimer(); setStatus('Tap to start a real call'); }
+            });
+
+            window.DograhWidget.onError(function (err) {
+              stopTimer();
+              var msg = (err && err.message) || 'Something went wrong';
+              if (/permission|denied|NotAllowed/i.test(msg)) {
+                msg = 'Microphone blocked — allow access and try again';
+              }
+              setStatus(msg, true);
+            });
+
+            window.DograhWidget.onCallDisconnected(function () {
+              stopTimer();
+              setStatus('Call ended — thanks for trying it');
+            });
+            return;
+          }
+          if (tries++ < 80) return setTimeout(waitForWidget, 100);
+          setStatus('Voice agent unavailable right now', true);
+        })();
+
+        // start() must run inside a real user gesture for mic permission.
+        btn.addEventListener('click', function () {
+          if (!window.DograhWidget) return;
+          if (state === 'connected' || state === 'connecting') window.DograhWidget.end();
+          else window.DograhWidget.start();
+        });
+      })();
+    </script>
+
+    <!-- Dograh Widget — RESTAURANT agent (Flame Grill Piri Piri · Alex), headless -->
+    <script>
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://app.dograh.com/embed/dograh-widget.js?token=emb_0kRo13TCraw8XJ-fzU653KYSP9In7RJ35VMUFkUd8Xc&environment=production&apiEndpoint=https://api.dograh.com';
+        js.setAttribute('data-dograh-context', JSON.stringify({
+          page_url: window.location.href,
+          today: new Date().toISOString().slice(0, 10),
+          source: 'skyweb_website_demo'
+        }));
+        js.async = true;
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'dograh-widget'));
+    </script>
+  </body>
+</html>

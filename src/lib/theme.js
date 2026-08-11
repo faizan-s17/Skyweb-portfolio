@@ -30,6 +30,7 @@ const LIGHT_SAFE = {
   '#4f9cf9': '#1d4ed8',
   '#ff5722': '#b23a12',
   '#a855f7': '#7e22ce',
+  '#ef4444': '#b91c1c',
 }
 
 export function accentColor(hex, isLight) {

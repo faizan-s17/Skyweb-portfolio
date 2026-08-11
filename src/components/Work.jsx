@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import DentalDemo from './DentalDemo'
 import RooferDemo from './RooferDemo'
+import RestaurantDemo from './RestaurantDemo'
 import { accentColor, useIsLight } from '../lib/theme'
 
 /* Standout, accent-branded heading for each demo category */
@@ -147,6 +148,23 @@ export default function Work() {
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
             <RooferDemo />
+          </div>
+        </ShowcasePanel>
+
+        {/* ───── Category 03 · AI Restaurant Receptionist ───── */}
+        <ShowcasePanel accent="#ef4444">
+          <CategoryHeader
+            index="03"
+            eyebrow="Live Voice Demo"
+            title="SkyWeb"
+            accentWord="OrderDesk"
+            tagline="AI Receptionist for Takeaways"
+            accent="#ef4444"
+            isLight={isLight}
+            description="Takes the order off a live menu, checks the delivery postcode, prices it and sends it to the kitchen — then texts the customer the moment the owner accepts. This one is not a recording: talk to it yourself."
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
+            <RestaurantDemo />
           </div>
         </ShowcasePanel>
 
