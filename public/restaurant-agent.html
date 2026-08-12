@@ -200,10 +200,16 @@
         if (d.getElementById(id)) return;
         js = d.createElement(s); js.id = id;
         js.src = 'https://app.dograh.com/embed/dograh-widget.js?token=emb_0kRo13TCraw8XJ-fzU653KYSP9In7RJ35VMUFkUd8Xc&environment=production&apiEndpoint=https://api.dograh.com';
+        // A browser call has no caller ID. The sentinel below is what the
+        // ordering tool sees in place of a phone number, and it is the only
+        // thing that marks an order as a website demo rather than a real one.
+        // Demo orders never trigger a customer SMS and are the only orders the
+        // public site is allowed to read back.
         js.setAttribute('data-dograh-context', JSON.stringify({
           page_url: window.location.href,
           today: new Date().toISOString().slice(0, 10),
-          source: 'skyweb_website_demo'
+          source: 'skyweb_website_demo',
+          phone_number: 'web-demo'
         }));
         js.async = true;
         fjs.parentNode.insertBefore(js, fjs);

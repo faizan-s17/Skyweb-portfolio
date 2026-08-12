@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   X, Flame, ArrowUpRight, Mic, MessageSquare, ClipboardCheck,
-  ShieldCheck, Clock, UtensilsCrossed,
+  ShieldCheck, Clock, UtensilsCrossed, Receipt,
 } from 'lucide-react'
 
 /* Piri-piri red — distinct from the dental blue and roofing orange. */
@@ -27,11 +27,68 @@ const PROMPTS = [
 const AFTER = [
   { Icon: ClipboardCheck, label: 'Order lands on the dashboard', text: 'Priced, itemised and timed, with an audible alert for the kitchen.' },
   { Icon: MessageSquare,  label: 'Owner taps Accept', text: 'The customer gets a confirmation text within seconds.' },
-  { Icon: Clock,          label: 'Or taps Decline', text: 'They pick a reason and the customer is told exactly why — no silence.' },
+  { Icon: Clock,          label: 'Or taps Decline', text: 'They pick a reason, and the customer is told exactly why instead of being left in silence.' },
 ]
+
+/* Read-only endpoint that returns the last order placed from this website, and
+ * nothing else. It carries no name, address, phone number or allergy note, and
+ * it cannot see orders taken over the phone. */
+const ORDER_ENDPOINT =
+  'https://puopmctahheptzdidppb.supabase.co/rest/v1/rpc/fn_web_demo_order'
+const ORDER_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1b3BtY3RhaGhlcHR6ZGlkcHBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxODc3NTAsImV4cCI6MjEwMTc2Mzc1MH0.GiKUS7jV-CRdaJfH-aVRXbHMaUwcRH2_Te9TcN4n6BA'
+
+const money = (n) => `£${Number(n ?? 0).toFixed(2)}`
+
+/* Polls for the order the visitor is placing right now, so the panel fills in
+ * while they are still talking. The hook only exists while the modal is
+ * mounted, so it stops polling as soon as the modal closes. */
+function useLiveOrder() {
+  const [order, setOrder] = useState(null)
+  const seenAt = useRef(null)
+
+  useEffect(() => {
+    let cancelled = false
+
+    const fetchOrder = async () => {
+      try {
+        const res = await fetch(ORDER_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: ORDER_KEY,
+            Authorization: `Bearer ${ORDER_KEY}`,
+          },
+          body: '{}',
+        })
+        if (!res.ok) return
+        const data = await res.json()
+        if (cancelled || !data?.ok) return
+        // ignore anything placed before this modal was opened
+        if (seenAt.current && new Date(data.placed_at) < seenAt.current) return
+        setOrder(data)
+      } catch {
+        /* the panel simply stays empty if the call fails */
+      }
+    }
+
+    // anything placed before this moment belongs to an earlier visitor
+    seenAt.current = new Date()
+    fetchOrder()
+    const id = setInterval(fetchOrder, 3000)
+    return () => {
+      cancelled = true
+      clearInterval(id)
+    }
+  }, [])
+
+  return order
+}
 
 /* ============================ Modal ============================== */
 function DemoModal({ onClose }) {
+  const order = useLiveOrder()
+
   return createPortal(
     <motion.div
       initial={{ opacity: 0 }}
@@ -140,13 +197,94 @@ function DemoModal({ onClose }) {
             </div>
           </div>
 
-          {/* ---------- Right: what happens after the call ---------- */}
+          {/* ---------- Right: the order, live ---------- */}
           <div className="p-7 sm:p-9 bg-white/[0.012]">
             <div className="flex items-center justify-between mb-5 lg:pr-10">
               <p className="font-mono text-xs tracking-[0.25em] uppercase" style={{ color: ACCENT }}>
-                After you hang up
+                Your order
               </p>
+              {order && (
+                <span className="font-mono text-[11px] text-white/40">{order.order_ref}</span>
+              )}
             </div>
+
+            <AnimatePresence mode="wait">
+              {order ? (
+                <motion.div
+                  key="order"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="mb-6 rounded-xl border p-4"
+                  style={{ background: `${ACCENT}0f`, borderColor: `${ACCENT}33` }}
+                >
+                  <ul className="space-y-2.5">
+                    {order.items?.map((line, i) => (
+                      <motion.li
+                        key={i}
+                        initial={{ opacity: 0, x: 12 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.06 }}
+                        className="flex items-start justify-between gap-3 text-sm"
+                      >
+                        <span className="min-w-0">
+                          <span className="text-white font-medium">
+                            {line.qty}x {line.name}
+                          </span>
+                          {line.options?.filter(Boolean).length > 0 && (
+                            <span className="block text-white/45 text-xs mt-0.5">
+                              {line.options.filter(Boolean).join(', ')}
+                            </span>
+                          )}
+                        </span>
+                        <span className="font-mono text-white/70 shrink-0">
+                          {money(line.line_total)}
+                        </span>
+                      </motion.li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-4 pt-3 border-t border-white/10 space-y-1.5 text-sm">
+                    {order.delivery_fee > 0 && (
+                      <div className="flex justify-between text-white/50">
+                        <span>Delivery</span>
+                        <span className="font-mono">{money(order.delivery_fee)}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between text-white font-semibold">
+                      <span>Total</span>
+                      <span className="font-mono">{money(order.total)}</span>
+                    </div>
+                  </div>
+
+                  <p className="mt-3 text-[11px] text-white/40 leading-relaxed">
+                    Priced by the same function that prices real orders. It is
+                    now sitting on the restaurant dashboard waiting to be
+                    accepted.
+                  </p>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="waiting"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="mb-6 flex flex-col items-center justify-center rounded-xl border border-dashed border-white/[0.12] px-4 py-10 text-center"
+                >
+                  <div className="w-10 h-10 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center text-white/30 mb-3">
+                    <Receipt size={18} />
+                  </div>
+                  <p className="text-white/40 text-sm leading-relaxed">
+                    Place an order on the call and it appears here, itemised and
+                    priced, the moment Alex puts it through.
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <p className="font-mono text-xs tracking-[0.25em] uppercase mb-4" style={{ color: ACCENT }}>
+              Then what
+            </p>
 
             <div className="space-y-3">
               {AFTER.map((step, i) => (
